@@ -1170,194 +1170,85 @@ $(document).ready(function() {
 
             var student_add_token  = $('#student_add_token').val().trim();
             var studentName        = $("#Single_StudentName").val().trim();
-            var AllGender          = $("input[name=AllGender]:checked").val().trim();
-            var studentDob         = convertstrtodate($('#SingleStudentDOB').datepicker('getDate'));
-            var studentNationality = $("#Single_StudentNationality").val().trim();
             var studentEmailID     = $("#Single_StudentEmailID").val().trim();
-            var studentDialCode    = $("#Single_StudentContactNo").intlTelInput("getNumber");
-            var studentRollNo      = $("#Single_StudentRollNo").val().trim();
-            var studentBloodGroup  = $("#Single_StudentBloodGroup").val().trim();
-            var studentImage       = document.getElementById('Single_Studentimage').files[0];
             var studentDescription = $("#Single_StudentDescription").val().trim();
-            var parentName         = $("#Single_ParentName").val().trim();
-            var parentEmailID      = $("#Single_ParentEmailID").val().trim();
-            var ParentContactNo    = $("#Single_ParentContactNo").intlTelInput("getNumber");
-            var parentOccupation   = $("#Single_ParentOccupation").val().trim();
-            var parentAddress      = $("#Single_ParentAddress").val().trim();
 
             if (studentName != '') 
             {
-                if (AllGender != '' && AllGender != undefined) 
+                if (validateEmail(studentEmailID)) 
                 {
-                    if (studentDob != '' && studentDob != '1970-01-01') 
-                    {
-                        if (studentNationality != '') 
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You want to proceed further!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes",
+                    }).then((result) => {
+                        if (result.isConfirmed) 
                         {
-                            if (validateEmail(studentEmailID)) 
-                            {
-                                if ($("#Single_StudentContactNo").intlTelInput("isValidNumber")) 
+                            $("#loader").css("display", 'block');
+
+                            formdata = new FormData();
+                            formdata.append('student_add_token'       , student_add_token);
+                            formdata.append('studentName'             , studentName);
+                            formdata.append('studentEmailID'          , studentEmailID);
+                            formdata.append('studentDescription'      , studentDescription);
+
+                            $.ajax({
+                                url: "Easylearn/Classroom_Controller/Add_Student",
+                                data: formdata,
+                                type: "POST",
+                                contentType: false,
+                                processData: false,
+                                success: function (response) 
                                 {
-                                    if (studentRollNo != '') 
+                                    $("#loader").css("display", 'none');
+
+                                    response = JSON.parse(response);
+                                    if (response.data == "TRUE") 
                                     {
-                                        if (studentBloodGroup != '') 
-                                        {
-                                            if(document.getElementById('Single_Studentimage').files.length > 0 && ValidateImage(studentImage))
-                                            {
-                                                if (parentName != '') 
-                                                {
-                                                    if (validateEmail(parentEmailID)) 
-                                                    {
-                                                        if ($("#Single_ParentContactNo").intlTelInput("isValidNumber")) 
-                                                        {
-                                                            if (parentOccupation != '') 
-                                                            {
-                                                                if (parentAddress != '') 
-                                                                {
-                                                                    Swal.fire({
-                                                                        title: "Are you sure?",
-                                                                        text: "You want to proceed further!",
-                                                                        icon: "warning",
-                                                                        showCancelButton: true,
-                                                                        confirmButtonColor: "#3085d6",
-                                                                        cancelButtonColor: "#d33",
-                                                                        confirmButtonText: "Yes",
-                                                                    }).then((result) => {
-                                                                        if (result.isConfirmed) 
-                                                                        {
-                                                                            $("#loader").css("display", 'block');
-
-                                                                            formdata = new FormData();
-                                                                            formdata.append('student_add_token'       , student_add_token);
-                                                                            formdata.append('studentName'             , studentName);
-                                                                            formdata.append('studentGender'           , AllGender);
-                                                                            formdata.append('studentDob'              , studentDob);
-                                                                            formdata.append('studentNationality'      , studentNationality);
-                                                                            formdata.append('studentEmailID'          , studentEmailID);
-                                                                            formdata.append('studentContactNo'        , studentDialCode);
-                                                                            formdata.append('studentRollNo'           , studentRollNo);
-                                                                            formdata.append('studentBloodGroup'       , studentBloodGroup);
-                                                                            formdata.append('studentImage'            , studentImage);
-                                                                            formdata.append('studentDescription'      , studentDescription);
-                                                                            formdata.append('studentParentName'       , parentName);
-                                                                            formdata.append('studentParentEmailID'    , parentEmailID);
-                                                                            formdata.append('studentParentContactNo'  , ParentContactNo);
-                                                                            formdata.append('studentParentOccupation' , parentOccupation);
-                                                                            formdata.append('studentParentAddress'    , parentAddress);
-
-                                                                            $.ajax({
-                                                                                url: "Easylearn/Classroom_Controller/Add_Student",
-                                                                                data: formdata,
-                                                                                type: "POST",
-                                                                                contentType: false,
-                                                                                processData: false,
-                                                                                success: function (response) 
-                                                                                {
-                                                                                    $("#loader").css("display", 'none');
-
-                                                                                    response = JSON.parse(response);
-                                                                                    if (response.data == "TRUE") 
-                                                                                    {
-                                                                                        Swal.fire({
-                                                                                            icon: "success",
-                                                                                            title: "Successfully Registered",
-                                                                                            text: "Please check your mail for further details",
-                                                                                        }).then((result) => {
-                                                                                            location.reload();
-                                                                                        });
-                                                                                    }
-                                                                                    else 
-                                                                                    {
-                                                                                        Swal.fire({
-                                                                                            icon: "error",
-                                                                                            title: "Oops...",
-                                                                                            text: response.data,
-                                                                                        }).then((result) => {
-                                                                                            // location.reload();
-                                                                                        });
-                                                                                    }
-                                                                                },
-                                                                                error: function (response) 
-                                                                                {
-                                                                                    $("#loader").css("display", 'none');
-
-                                                                                    Swal.fire({
-                                                                                        icon: "error",
-                                                                                        title: "Oops...",
-                                                                                        text: 'Something Went Wrong',
-                                                                                    }).then((result) => {
-                                                                                        // location.reload();
-                                                                                    });
-                                                                                },
-                                                                            });
-
-                                                                        } 
-                                                                    });
-                                                                } 
-                                                                else 
-                                                                {
-                                                                    $('.check-ParentAddress').removeClass('d-none');
-                                                                }
-                                                            } 
-                                                            else 
-                                                            {
-                                                                $('.check-ParentOccupation').removeClass('d-none');
-                                                            }
-                                                        } 
-                                                        else 
-                                                        {
-                                                            $('.check-ParentContact').removeClass('d-none');
-                                                        }
-                                                    } 
-                                                    else 
-                                                    {
-                                                        $('.check-ParentEmailID').removeClass('d-none');
-                                                    }
-                                                } 
-                                                else 
-                                                {
-                                                    $('.check-ParentName').removeClass('d-none');
-                                                }
-                                            }
-                                            else
-                                            {
-                                                $('.check-Single_Studentimage').removeClass('d-none');
-                                            }
-                                        } 
-                                        else 
-                                        {
-                                            $('.check-StudentBloodgroup').removeClass('d-none');
-                                        }
-                                    } 
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Successfully Registered",
+                                            text: "Please check your mail for further details",
+                                        }).then((result) => {
+                                            location.reload();
+                                        });
+                                    }
                                     else 
                                     {
-                                        $('.check-StudentRollNo').removeClass('d-none');
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Oops...",
+                                            text: response.data,
+                                        }).then((result) => {
+                                            // location.reload();
+                                        });
                                     }
-                                } 
-                                else 
+                                },
+                                error: function (response) 
                                 {
-                                    $('.check-StudentContactNo').removeClass('d-none');
-                                }
-                            } 
-                            else 
-                            {
-                                $('.check-StudentEmailID').removeClass('d-none');
-                                $(".check-StudentEmailID").addClass("bg-danger");
-                                $(".check-StudentEmailID").removeClass("bg-success");
-                            }
+                                    $("#loader").css("display", 'none');
+
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: 'Something Went Wrong',
+                                    }).then((result) => {
+                                        // location.reload();
+                                    });
+                                },
+                            });
                         } 
-                        else 
-                        {
-                            $('.check-StudentNationality').removeClass('d-none');
-                        }
-                    } 
-                    else 
-                    {
-                        $('.check-StudentDob').removeClass('d-none');
-                    }
+                    });
                 } 
                 else 
                 {
-                    $('.check-StudentGender').removeClass('d-none');
+                    $('.check-StudentEmailID').removeClass('d-none');
+                    $(".check-StudentEmailID").addClass("bg-danger");
+                    $(".check-StudentEmailID").removeClass("bg-success");
                 }
             } 
             else 
@@ -1442,7 +1333,7 @@ $(document).ready(function() {
 
 
         //Classname Validations
-        $("#classroom_name").on("input", function () {
+        $("#classroom_name").on("keyup", function () {
           var name = $(this).val().trim();
 
           if (name == null || name == "") {

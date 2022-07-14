@@ -1,38 +1,40 @@
 <?php include 'template/login_header.php';?>
 
 <section class="content">
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 bg-white pb-20">
-                <div class='row'>
-                    <div class='col-6'>
-                        <div class="text-start p-3">
-                            <a href="dashboard" class="btn btn-info active"><i
-                                    class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class='row'>
+                        <div class='col-6'>
+                            <div class="text-start p-3">
+                                <a href="dashboard" class="btn btn-info active"><i
+                                        class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+                            </div>
+                        </div>
+
+                        <div class='col-6'>
+                            <div style='text-align: right' class='p-3'>
+                                <button class="btn btn-primary" id="add_news_btn">Add News</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class='col-6'>
-                        <div style='text-align: right' class='p-3'>
-                            <button class="btn btn-primary" id="add_news_btn">Add News</button>
-                        </div>
+                    <h3 class="text-center text-dark bold">News</h3>
+                    <div class="table-responsive p-3">
+                        <table id="news_list" class="table text-center" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Image</th>
+                                    <th>Topic</th>
+                                    <th>News</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                </div>
-
-                <h3 class="text-center text-dark bold">News</h3>
-                <div class="table-responsive p-3">
-                    <table id="news_list" class="table text-center" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Image</th>
-                                <th>Topic</th>
-                                <th>News</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                            </tr>
-                        </thead>
-                    </table>
                 </div>
             </div>
         </div>

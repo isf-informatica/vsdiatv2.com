@@ -24,7 +24,7 @@
                                 <label for="Name">Classroom Name :</label>
                                 <input type="text" class="form-control form-control-lg" id="classroom_name" placeholder="Classroom Name">
                                 
-                                <div class='d-none bg-danger d-md-inline-flex check_classroom_name' style='font-size: 12px; padding-left: 20px;'>
+                                <div class='d-none bg-danger check_classroom_name' style='font-size: 12px; padding-left: 20px;'>
                                     <i class="fas fa-times-circle"></i>Invalid Classroom name
                                 </div>
                             </div>

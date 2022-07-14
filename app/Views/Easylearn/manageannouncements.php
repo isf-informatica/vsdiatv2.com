@@ -1,38 +1,39 @@
 <?php include 'template/login_header.php'; ?>
 
 <section class="content">
-    <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 bg-white pb-20">
-                <div class='row'>
-                    <div class='col-6'>
-                        <div class="text-start p-3">
-                            <a href="dashboard" class="btn btn-info active"><i
-                                    class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="box">
+                <div class="box-body">
+                    <div class='row'>
+                        <div class='col-6'>
+                            <div class="text-start p-3">
+                                <a href="dashboard" class="btn btn-info active"><i
+                                        class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+                            </div>
+                        </div>
+
+                        <div class='col-6'>
+                            <div style='text-align: right' class='p-3'>
+                                <button class="btn btn-primary" id="add_anc_btn">Add Announcements</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class='col-6'>
-                        <div style='text-align: right' class='p-3'>
-                            <button class="btn btn-primary" id="add_anc_btn">Add Announcements</button>
-                        </div>
+                    <h3 class="text-center text-dark bold">Announcements</h3>
+                    <div class="table-responsive p-3">
+                        <table id="anc_list" class="table text-center" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Topic</th>
+                                    <th>Announcements</th>
+                                    <th>Date & Time</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
-
-                <h3 class="text-center text-dark bold">Announcements</h3>
-                <div class="table-responsive p-3">
-                    <table id="anc_list" class="table text-center" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Topic</th>
-                                <th>Announcements</th>
-                                <th>Date & Time</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-
             </div>
         </div>
     </div>

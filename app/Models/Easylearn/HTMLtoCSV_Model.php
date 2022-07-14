@@ -656,197 +656,64 @@ class HTMLtoCSV_Model extends Model
 
         foreach($insert_data as $dat)
         {
-            $builder = $this->db->table('el_accounts');
-            $builder->select('id','email');
-            $builder->where('email', $dat['parent_emailid']);
-            $query = $builder->get();
+            $rand = rand(1000,9999);
 
-            if($query->getNumRows()>0)
+            //Add in accounts table
+            $data = array(
+                'unique_id'   => date("YmdHis").$rand,
+                'reg_id'      => $this->session->get('user')['reg_id'],
+                'username'    => $dat['student_name'],
+                'email'       => $dat['student_emailid'],
+                'pass'        => password_hash("vsdiat", PASSWORD_BCRYPT),
+                'permissions' => 'Student',
+                'status'      => 'Verified',
+                'added_by'    => $this->session->get('user')['id'],
+                'updated_by'  => $this->session->get('user')['id'],
+                'is_del'      => 0,
+            );
+
+            $builder1 = $this->db->table('el_accounts');
+            $dataInserted = $builder1->insert($data);
+            $CurrentStudentID = $this->db->insertID();
+
+            //Add in Student Table
+            $Studentdata = array(
+                'unique_id'           => date("YmdHis").$rand,
+                'account_id'          => $CurrentStudentID,
+                'student_name'        => $dat['student_name'],
+                'student_emailid'     => $dat['student_emailid'],
+                'student_description' => $dat['student_description'],
+                'added_by'            => $this->session->get('user')['id'],
+                'updated_by'          => $this->session->get('user')['id'],
+                'is_del'              => 0,
+            );
+
+            $Studentbuilder = $this->db->table('el_student');
+            $StudentInserted = $Studentbuilder->insert($Studentdata);
+
+            //Add student in accounts details table
+            $Student_Acc_Details = array(
+                'account_id'     => $CurrentStudentID,
+                'contact_number' => '',
+                'description'    => $dat['student_description'],
+                'profile_image'  => '',
+                'layout_pref'    => 'Menu',
+                'language_pref'  => 'English',
+                'added_by'       => $this->session->get('user')['id'],
+                'updated_by'     => $this->session->get('user')['id'],
+                'is_del'         => 0
+            );
+
+            $Student_ac_builder = $this->db->table('el_account_details');
+            $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
+
+            if($dataInserted && $StudentInserted && $Student_ac_inserted)
             {
-                $rand = rand(1000,9999);
-
-                $rowData = (array)$query->getRow();
-                $CurrentParentID = $rowData['id'];
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis").$rand,
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['student_name'],
-                    'email'       => $dat['student_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis").$rand,
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $dat['student_name'],
-                    'student_gender'      => $dat['student_gender'],
-                    'student_dob'         => $dat['student_dob'],
-                    'student_emailid'     => $dat['student_emailid'],
-                    'student_nationality' => $dat['student_nationality'],
-                    'student_contactno'   => $dat['student_contactno'],
-                    'student_rollno'      => $dat['student_rollno'],
-                    'student_bloodgroup'  => $dat['student_bloodgroup'],
-                    'student_image'       => $dat['student_image'],
-                    'student_description' => $dat['student_description'],
-                    'parent_name'         => $dat['parent_name'],
-                    'parent_emailid'      => $dat['parent_emailid'],
-                    'parent_contactno'    => $dat['parent_contactno'],
-                    'parent_occupation'   => $dat['parent_occupation'],
-                    'parent_address'      => $dat['parent_address'],
-                    'added_by'            => $this->session->get('user')['id'],
-                    'updated_by'          => $this->session->get('user')['id'],
-                    'is_del'              => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $dat['student_contactno'],
-                    'description'    => $dat['student_description'],
-                    'profile_image'  => $dat['student_image'],
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                $this->student_email($dat['student_emailid']);
-                $this->existparent_email($dat['parent_emailid'],$dat['student_name']);
-
-                if($dataInserted && $StudentInserted && $Student_ac_inserted)
-                {
-                    $inserted += 1;
-                }
-                else
-                {
-                    $not_inserted += 1;
-                }
+                $inserted += 1;
             }
             else
             {
-                $rand = rand(1000,9999);
-                
-                //Add parent in accounts table
-                $Parentdata = array(
-                    'unique_id'   => date("YmdHis").$rand,
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['parent_name'],
-                    'email'       => $dat['parent_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Parent',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $Parentbuilder = $this->db->table('el_accounts');
-                $ParentdataInserted = $Parentbuilder->insert($Parentdata);
-                $CurrentParentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Parent_Acc_Details = array(
-                    'account_id'     => $CurrentParentID,
-                    'contact_number' => $dat['parent_contactno'],
-                    'description'    => '',
-                    'profile_image'  => '',
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-
-                $Parent_ac_builder = $this->db->table('el_account_details');
-                $Parent_ac_inserted = $Parent_ac_builder->insert($Parent_Acc_Details);
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis")+($rand+1),
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['student_name'],
-                    'email'       => $dat['student_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                 //Add student in accounts details table
-                 $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $dat['student_contactno'],
-                    'description'    => $dat['student_description'],
-                    'profile_image'  => $dat['student_image'],
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                //Add in Student Table
-                $Studentdata = array(
-
-                    'unique_id'           => date("YmdHis")+$rand,
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $dat['student_name'],
-                    'student_gender'      => $dat['student_gender'],
-                    'student_dob'         => $dat['student_dob'],
-                    'student_emailid'     => $dat['student_emailid'],
-                    'student_nationality' => $dat['student_nationality'],
-                    'student_contactno'   => $dat['student_contactno'],
-                    'student_rollno'      => $dat['student_rollno'],
-                    'student_bloodgroup'  => $dat['student_bloodgroup'],
-                    'student_image'       => $dat['student_image'],
-                    'student_description' => $dat['student_description'],
-                    'parent_name'         => $dat['parent_name'],
-                    'parent_emailid'      => $dat['parent_emailid'],
-                    'parent_contactno'    => $dat['parent_contactno'],
-                    'parent_occupation'   => $dat['parent_occupation'],
-                    'parent_address'      => $dat['parent_address'],
-                    'added_by'            => $this->session->get('user')['id'],
-                    'updated_by'          => $this->session->get('user')['id'],
-                    'is_del'              => 0
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                $inserted += 1 ;
-
-                $this->student_email($dat['student_emailid']);
-                $this->parent_email($dat['parent_emailid'],$dat['student_name']);
-
+                $not_inserted += 1;
             }
         }
 
@@ -866,219 +733,75 @@ class HTMLtoCSV_Model extends Model
 
         foreach($insert_data as $dat)
         {
-            $builder = $this->db->table('el_accounts');
-            $builder->select('id','email');
-            $builder->where('email', $dat['parent_emailid']);
-            $query = $builder->get();
+            $rand = rand(1000,9999);
 
-            if($query->getNumRows()>0)
+            //Add in accounts table
+            $data = array(
+                'unique_id'   => date("YmdHis").$rand,
+                'reg_id'      => $this->session->get('user')['reg_id'],
+                'username'    => $dat['student_name'],
+                'email'       => $dat['student_emailid'],
+                'pass'        => password_hash("vsdiat", PASSWORD_BCRYPT),
+                'permissions' => 'Student',
+                'status'      => 'Verified',
+                'added_by'    => $this->session->get('user')['id'],
+                'updated_by'  => $this->session->get('user')['id'],
+                'is_del'      => 0,
+            );
+
+            $builder1 = $this->db->table('el_accounts');
+            $dataInserted = $builder1->insert($data);
+            $CurrentStudentID = $this->db->insertID();
+
+            //Add in Student Table
+            $Studentdata = array(
+                'unique_id'           => date("YmdHis").$rand,
+                'account_id'          => $CurrentStudentID,
+                'student_name'        => $dat['student_name'],
+                'student_emailid'     => $dat['student_emailid'],
+                'student_description' => $dat['student_description'],
+                'added_by'            => $this->session->get('user')['id'],
+                'updated_by'          => $this->session->get('user')['id'],
+                'is_del'              => 0,
+            );
+
+            $Studentbuilder = $this->db->table('el_student');
+            $StudentInserted = $Studentbuilder->insert($Studentdata);
+
+            //Add student in accounts details table
+            $Student_Acc_Details = array(
+                'account_id'     => $CurrentStudentID,
+                'contact_number' => '',
+                'description'    => $dat['student_description'],
+                'profile_image'  => '',
+                'layout_pref'    => 'Menu',
+                'language_pref'  => 'English',
+                'added_by'       => $this->session->get('user')['id'],
+                'updated_by'     => $this->session->get('user')['id'],
+                'is_del'         => 0
+            );
+
+            $Student_ac_builder = $this->db->table('el_account_details');
+            $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
+
+            $Assign_Student_Classroom = array(
+                'account_id'     => $CurrentStudentID,
+                'classroom_id'   => $classroom_id,
+                'added_by'       => $id,
+                'updated_by'     => $id,
+                'is_del'         => 0
+            );
+
+            $assign_classroom_students = $this->db->table('el_classroom_assignment');
+            $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
+
+            if($dataInserted && $StudentInserted && $Student_ac_inserted && $assign_classroom_inserted)
             {
-                $rand = rand(1000,9999);
-
-                $rowData = (array)$query->getRow();
-                $CurrentParentID = $rowData['id'];
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis").$rand,
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['student_name'],
-                    'email'       => $dat['student_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis").$rand,
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $dat['student_name'],
-                    'student_gender'      => $dat['student_gender'],
-                    'student_dob'         => $dat['student_dob'],
-                    'student_emailid'     => $dat['student_emailid'],
-                    'student_nationality' => $dat['student_nationality'],
-                    'student_contactno'   => $dat['student_contactno'],
-                    'student_rollno'      => $dat['student_rollno'],
-                    'student_bloodgroup'  => $dat['student_bloodgroup'],
-                    'student_image'       => $dat['student_image'],
-                    'student_description' => $dat['student_description'],
-                    'parent_name'         => $dat['parent_name'],
-                    'parent_emailid'      => $dat['parent_emailid'],
-                    'parent_contactno'    => $dat['parent_contactno'],
-                    'parent_occupation'   => $dat['parent_occupation'],
-                    'parent_address'      => $dat['parent_address'],
-                    'added_by'            => $this->session->get('user')['id'],
-                    'updated_by'          => $this->session->get('user')['id'],
-                    'is_del'              => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $dat['student_contactno'],
-                    'description'    => $dat['student_description'],
-                    'profile_image'  => $dat['student_image'],
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                $Assign_Student_Classroom = array(
-                    'account_id'     => $CurrentStudentID,
-                    'classroom_id'   => $classroom_id,
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $assign_classroom_students = $this->db->table('el_classroom_assignment');
-                $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
-
-                $this->student_email($dat['student_emailid']);
-                $this->existparent_email($dat['parent_emailid'],$dat['student_name']);
-
-                if($dataInserted && $StudentInserted && $Student_ac_inserted && $assign_classroom_inserted)
-                {
-                    $inserted += 1;
-                }
-                else
-                {
-                    $not_inserted += 1;
-                }
+                $inserted += 1;
             }
             else
             {
-                $rand = rand(1000,9999);
-                
-                //Add parent in accounts table
-                $Parentdata = array(
-                    'unique_id'   => date("YmdHis").$rand,
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['parent_name'],
-                    'email'       => $dat['parent_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Parent',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $Parentbuilder = $this->db->table('el_accounts');
-                $ParentdataInserted = $Parentbuilder->insert($Parentdata);
-                $CurrentParentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Parent_Acc_Details = array(
-                    'account_id'     => $CurrentParentID,
-                    'contact_number' => $dat['parent_contactno'],
-                    'description'    => '',
-                    'profile_image'  => '',
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-
-                $Parent_ac_builder = $this->db->table('el_account_details');
-                $Parent_ac_inserted = $Parent_ac_builder->insert($Parent_Acc_Details);
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis")+($rand+1),
-                    'reg_id'      => $this->session->get('user')['reg_id'],
-                    'username'    => $dat['student_name'],
-                    'email'       => $dat['student_emailid'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'added_by'    => $this->session->get('user')['id'],
-                    'updated_by'  => $this->session->get('user')['id'],
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                 //Add student in accounts details table
-                 $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $dat['student_contactno'],
-                    'description'    => $dat['student_description'],
-                    'profile_image'  => $dat['student_image'],
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $this->session->get('user')['id'],
-                    'updated_by'     => $this->session->get('user')['id'],
-                    'is_del'         => 0
-                );
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                //Add in Student Table
-                $Studentdata = array(
-
-                    'unique_id'           => date("YmdHis")+$rand,
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $dat['student_name'],
-                    'student_gender'      => $dat['student_gender'],
-                    'student_dob'         => $dat['student_dob'],
-                    'student_emailid'     => $dat['student_emailid'],
-                    'student_nationality' => $dat['student_nationality'],
-                    'student_contactno'   => $dat['student_contactno'],
-                    'student_rollno'      => $dat['student_rollno'],
-                    'student_bloodgroup'  => $dat['student_bloodgroup'],
-                    'student_image'       => $dat['student_image'],
-                    'student_description' => $dat['student_description'],
-                    'parent_name'         => $dat['parent_name'],
-                    'parent_emailid'      => $dat['parent_emailid'],
-                    'parent_contactno'    => $dat['parent_contactno'],
-                    'parent_occupation'   => $dat['parent_occupation'],
-                    'parent_address'      => $dat['parent_address'],
-                    'added_by'            => $this->session->get('user')['id'],
-                    'updated_by'          => $this->session->get('user')['id'],
-                    'is_del'              => 0
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                $Assign_Student_Classroom = array(
-                    'account_id'     => $CurrentStudentID,
-                    'classroom_id'   => $classroom_id,
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $assign_classroom_students = $this->db->table('el_classroom_assignment');
-                $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
-
-                $inserted += 1 ;
-
-                $this->student_email($dat['student_emailid']);
-                $this->parent_email($dat['parent_emailid'],$dat['student_name']);
-
+                $not_inserted += 1;
             }
         }
 

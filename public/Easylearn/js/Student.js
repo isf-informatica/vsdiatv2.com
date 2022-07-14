@@ -44,12 +44,7 @@ $(document).ready(function () {
                     },
                 },
                 { data: "student_name" },
-                { data: "student_gender" },
-                { data: "student_emailid" },
-                { data: "student_contactno" },
-                { data: "parent_name" },
-                { data: "parent_emailid" },
-                { data: "parent_contactno" },
+                { data: "student_emailid" }
             ]
         });
 
@@ -68,21 +63,11 @@ $(document).ready(function () {
 
                     $('.unique_id').attr('data-id',response.data.unique_id);
                     $('.s_name').text(response.data.student_name);
-                    $('.s_dob').text(response.data.student_dob);
-                    $('.s_gender').text(response.data.student_gender);
-                    $('.s_nationality').text(response.data.student_nationality);
                     $('.s_email').text(response.data.student_emailid); 
-                    $('.s_contact').text(response.data.student_contactno);
-                    $('.s_rollno').text(response.data.student_rollno);
-                    $('.s_bloodgrp').text(response.data.student_bloodgroup);
                     $('.s_descp').text(response.data.student_description); 
-                    $('.p_name').text(response.data.parent_name);             
-                    $('.p_email').text(response.data.parent_emailid);               
-                    $('.p_contact').text(response.data.parent_contactno);                 
-                    $('.p_occupation').text(response.data.parent_occupation);              
-                    $('.student_image').attr('src',response.data.profile_image);    
-                    $('.s_address').text(response.data.parent_address);
-                    $('.edit-student').attr("href", "studentView?id="+response.data.unique_id);                  
+
+                    $('.delete-student').attr("data-id", response.data.unique_id);
+
                     $('#view_student_modal').modal('show');
                 },
                 error: function (response) {
@@ -92,6 +77,72 @@ $(document).ready(function () {
                         text: "Something went wrong!",
                     }).then((result) => {
                         //Hello;
+                    });
+                }
+            });
+        });
+
+        $('.delete-student').on('click', function() {
+            var unique_id  = $(this).attr('data-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete student?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete'
+            }).then((result) => {
+                if (result.isConfirmed) 
+                {
+                    $('#loader').css('display', 'block');
+
+                    $.ajax({
+                        url: "Easylearn/Classroom_Controller/delete_student",
+                        data: {
+                            id : unique_id
+                        },
+                        type: "POST",
+                        success: function (response) 
+                        {
+                            $('#loader').css('display', 'none');
+                            response = JSON.parse(response);
+
+                            if (response["data"] == "TRUE") 
+                            {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Deleted Successfully!",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                }).then((result) => {
+                                    location.href = 'manageStudents'
+                                });
+                            } 
+                            else 
+                            {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: response.data,
+                                }).then((result) => {
+                                    //location.reload();
+                                });
+                            }
+                        },
+                        error: function (response) 
+                        {
+                            $('#loader').css('display', 'none');
+
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                            }).then((result) => {
+                                //location.reload();
+                            });
+                        }
                     });
                 }
             });
@@ -364,72 +415,6 @@ $(document).ready(function () {
                 $("#student_name").focus();
                 $('.edit_check_StudentName').removeClass('d-none');
             }
-        });
-
-        $('.delete-student').on('click', function() {
-            var unique_id  = (location.search.split(name + '=')[1] || '').split('&')[0];
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You want to delete student?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Delete'
-            }).then((result) => {
-                if (result.isConfirmed) 
-                {
-                    $('#loader').css('display', 'block');
-
-                    $.ajax({
-                        url: "Easylearn/Classroom_Controller/delete_student",
-                        data: {
-                            id : unique_id
-                        },
-                        type: "POST",
-                        success: function (response) 
-                        {
-                            $('#loader').css('display', 'none');
-                            response = JSON.parse(response);
-
-                            if (response["data"] == "TRUE") 
-                            {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Deleted Successfully!",
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                }).then((result) => {
-                                    location.href = 'manageStudents'
-                                });
-                            } 
-                            else 
-                            {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Oops...",
-                                    text: response.data,
-                                }).then((result) => {
-                                    //location.reload();
-                                });
-                            }
-                        },
-                        error: function (response) 
-                        {
-                            $('#loader').css('display', 'none');
-
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Something went wrong!",
-                            }).then((result) => {
-                                //location.reload();
-                            });
-                        }
-                    });
-                }
-            });
         });
     }
 });

@@ -245,197 +245,64 @@ class Classroom_Model extends Model
 
         if($query->getNumRows() == 0)
         {
-            $builder = $this->db->table('el_accounts');
-            $builder->select('id','email');
-            $builder->where('email', $SingleStudentData['studentParentEmailID']);
-            $builder->where('is_del', 0);
-            $query = $builder->get();
 
-            if($query->getNumRows()>0)
+            //Add in accounts table
+            $data = array(
+                'unique_id'   => date("YmdHis"),
+                'reg_id'      => $reg_id,
+                'username'    => $SingleStudentData['studentName'],
+                'email'       => $SingleStudentData['studentEmailID'],
+                'pass'        => password_hash("vsdiat", PASSWORD_BCRYPT),
+                'permissions' => 'Student',
+                'status'      => 'Verified',
+                'mfa_status'  => 0,
+                'added_by'    => $id,
+                'updated_by'  => $id,
+                'is_del'      => 0,
+            );
+
+            $builder1 = $this->db->table('el_accounts');
+            $dataInserted = $builder1->insert($data);
+            $CurrentStudentID = $this->db->insertID();
+
+            //Add in Student Table
+            $Studentdata = array(
+                'unique_id'           => date("YmdHis"),
+                'account_id'          => $CurrentStudentID,
+                'parent_id'           => 0,
+                'student_name'        => $SingleStudentData['studentName'],
+                'student_emailid'     => $SingleStudentData['studentEmailID'],
+                'added_by'            => $id,
+                'updated_by'          => $id,
+                'is_del'              => 0,
+            );
+
+            $Studentbuilder = $this->db->table('el_student');
+            $StudentInserted = $Studentbuilder->insert($Studentdata);
+
+            //Add student in accounts details table
+            $Student_Acc_Details = array(
+                'account_id'     => $CurrentStudentID,
+                'contact_number' => '',
+                'description'    => $SingleStudentData['studentDescription'],
+                'profile_image'  => $image,
+                'layout_pref'    => 'Menu',
+                'language_pref'  => 'English',
+                'added_by'       => $id,
+                'updated_by'     => $id,
+                'is_del'         => 0
+            );
+
+            $Student_ac_builder = $this->db->table('el_account_details');
+            $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
+
+            if($dataInserted && $StudentInserted && $Student_ac_inserted)
             {
-                $rowData = (array)$query->getRow();
-                $CurrentParentID = $rowData['id'];
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis"),
-                    'reg_id'      => $reg_id,
-                    'username'    => $SingleStudentData['studentName'],
-                    'email'       => $SingleStudentData['studentEmailID'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'mfa_status'  => 0,
-                    'added_by'    => $id,
-                    'updated_by'  => $id,
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis"),
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $SingleStudentData['studentName'],
-                    'student_gender'      => $SingleStudentData['studentGender'],
-                    'student_dob'         => $SingleStudentData['studentDob'],
-                    'student_emailid'     => $SingleStudentData['studentEmailID'],
-                    'student_nationality' => $SingleStudentData['studentNationality'],
-                    'student_contactno'   => $SingleStudentData['studentContactNo'],
-                    'student_rollno'      => $SingleStudentData['studentRollNo'],
-                    'student_bloodgroup'  => $SingleStudentData['studentBloodGroup'],
-                    'student_image'       => $image,
-                    'student_description' => $SingleStudentData['studentDescription'],
-                    'parent_name'         => $SingleStudentData['studentParentName'],
-                    'parent_emailid'      => $SingleStudentData['studentParentEmailID'],
-                    'parent_contactno'    => $SingleStudentData['studentParentContactNo'],
-                    'parent_occupation'   => $SingleStudentData['studentParentOccupation'],
-                    'parent_address'      => $SingleStudentData['studentParentAddress'],
-                    'added_by'            => $id,
-                    'updated_by'          => $id,
-                    'is_del'              => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $SingleStudentData['studentContactNo'],
-                    'description'    => $SingleStudentData['studentDescription'],
-                    'profile_image'  => $image,
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                if($dataInserted && $StudentInserted && $Student_ac_inserted)
-                {
-                    return TRUE;
-                }
-                else
-                {
-                    return FALSE;
-                }     
+                return TRUE;
             }
             else
             {
-                //Add student in accounts table
-                $StudentData = array(
-                    'unique_id'  => date("YmdHis"),
-                    'reg_id'     => $reg_id,
-                    'username'   => $SingleStudentData['studentName'],
-                    'email'      => $SingleStudentData['studentEmailID'],
-                    'pass'       => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions'=> 'Student',
-                    'status'     => 'Verified',
-                    'mfa_status' => 0,
-                    'added_by'   => $id,
-                    'updated_by' => $id,
-                    'is_del'     => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_accounts');
-                $StudentdataInserted = $Studentbuilder->insert($StudentData);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $SingleStudentData['studentContactNo'],
-                    'description'    => $SingleStudentData['studentDescription'],
-                    'profile_image'  => $image,
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                //Add parent in accounts table
-                $Parentdata = array(
-                    'unique_id'   => date("YmdHis")+1,
-                    'reg_id'      => $reg_id,
-                    'username'    => $SingleStudentData['studentParentName'],
-                    'email'       => $SingleStudentData['studentParentEmailID'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Parent',
-                    'status'      => 'Verified',
-                    'mfa_status'  => 0,
-                    'added_by'    => $id,
-                    'updated_by'  => $id,
-                    'is_del'      => 0,
-                );
-
-                $Parentbuilder = $this->db->table('el_accounts');
-                $ParentdataInserted = $Parentbuilder->insert($Parentdata);
-                $CurrentParentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Parent_Acc_Details = array(
-                    'account_id'     => $CurrentParentID,
-                    'contact_number' => $SingleStudentData['studentParentContactNo'],
-                    'description'    => '',
-                    'profile_image'  => '',
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Parent_ac_builder = $this->db->table('el_account_details');
-                $Parent_ac_inserted = $Parent_ac_builder->insert($Parent_Acc_Details);
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis"),
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $SingleStudentData['studentName'],
-                    'student_gender'      => $SingleStudentData['studentGender'],
-                    'student_dob'         => $SingleStudentData['studentDob'],
-                    'student_emailid'     => $SingleStudentData['studentEmailID'],
-                    'student_nationality' => $SingleStudentData['studentNationality'],
-                    'student_contactno'   => $SingleStudentData['studentContactNo'],
-                    'student_rollno'      => $SingleStudentData['studentRollNo'],
-                    'student_bloodgroup'  => $SingleStudentData['studentBloodGroup'],
-                    'student_image'       => $image,
-                    'student_description' => $SingleStudentData['studentDescription'],
-                    'parent_name'         => $SingleStudentData['studentParentName'],
-                    'parent_emailid'      => $SingleStudentData['studentParentEmailID'],
-                    'parent_contactno'    => $SingleStudentData['studentParentContactNo'],
-                    'parent_occupation'   => $SingleStudentData['studentParentOccupation'],
-                    'parent_address'      => $SingleStudentData['studentParentAddress'],
-                    'added_by'            => $id,
-                    'updated_by'          => $id,
-                    'is_del'              => 0
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                if($StudentInserted && $Parent_ac_inserted && $ParentdataInserted && $StudentdataInserted && $Student_ac_inserted)
-                {
-                    return TRUE;
-                }
-                else
-                {
-                    return FALSE;
-                }
+                return FALSE;
             }
         }
         else
@@ -455,221 +322,73 @@ class Classroom_Model extends Model
 
         if($query->getNumRows() == 0)
         {
-            $builder = $this->db->table('el_accounts');
-            $builder->select('id','email');
-            $builder->where('email', $SingleStudentData['studentParentEmailID']);
-            $builder->where('is_del', 0);
-            $query = $builder->get();
+            //Add in accounts table
+            $data = array(
+                'unique_id'   => date("YmdHis"),
+                'reg_id'      => $reg_id,
+                'username'    => $SingleStudentData['studentName'],
+                'email'       => $SingleStudentData['studentEmailID'],
+                'pass'        => password_hash("vsdiat", PASSWORD_BCRYPT),
+                'permissions' => 'Student',
+                'status'      => 'Verified',
+                'mfa_status'  => 0,
+                'added_by'    => $id,
+                'updated_by'  => $id,
+                'is_del'      => 0,
+            );
 
-            if($query->getNumRows()>0)
+            $builder1 = $this->db->table('el_accounts');
+            $dataInserted = $builder1->insert($data);
+            $CurrentStudentID = $this->db->insertID();
+
+            //Add in Student Table
+            $Studentdata = array(
+                'unique_id'           => date("YmdHis"),
+                'account_id'          => $CurrentStudentID,
+                'student_emailid'     => $SingleStudentData['studentEmailID'],
+                'student_description' => $SingleStudentData['studentDescription'],
+                'added_by'            => $id,
+                'updated_by'          => $id,
+                'is_del'              => 0,
+            );
+
+            $Studentbuilder = $this->db->table('el_student');
+            $StudentInserted = $Studentbuilder->insert($Studentdata);
+
+            //Add student in accounts details table
+            $Student_Acc_Details = array(
+                'account_id'     => $CurrentStudentID,
+                'contact_number' => '',
+                'description'    => $SingleStudentData['studentDescription'],
+                'profile_image'  => $image,
+                'layout_pref'    => 'Menu',
+                'language_pref'  => 'English',
+                'added_by'       => $id,
+                'updated_by'     => $id,
+                'is_del'         => 0
+            );
+
+            $Student_ac_builder = $this->db->table('el_account_details');
+            $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
+
+            $Assign_Student_Classroom = array(
+                'account_id'     => $CurrentStudentID,
+                'classroom_id'   => $classroom_id,
+                'added_by'       => $id,
+                'updated_by'     => $id,
+                'is_del'         => 0
+            );
+
+            $assign_classroom_students = $this->db->table('el_classroom_assignment');
+            $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
+
+            if($dataInserted && $StudentInserted && $Student_ac_inserted && $assign_classroom_inserted)
             {
-                $rowData = (array)$query->getRow();
-                $CurrentParentID = $rowData['id'];
-
-                //Add in accounts table
-                $data = array(
-                    'unique_id'   => date("YmdHis"),
-                    'reg_id'      => $reg_id,
-                    'username'    => $SingleStudentData['studentName'],
-                    'email'       => $SingleStudentData['studentEmailID'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Student',
-                    'status'      => 'Verified',
-                    'mfa_status'  => 0,
-                    'added_by'    => $id,
-                    'updated_by'  => $id,
-                    'is_del'      => 0,
-                );
-
-                $builder1 = $this->db->table('el_accounts');
-                $dataInserted = $builder1->insert($data);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis"),
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $SingleStudentData['studentName'],
-                    'student_gender'      => $SingleStudentData['studentGender'],
-                    'student_dob'         => $SingleStudentData['studentDob'],
-                    'student_emailid'     => $SingleStudentData['studentEmailID'],
-                    'student_nationality' => $SingleStudentData['studentNationality'],
-                    'student_contactno'   => $SingleStudentData['studentContactNo'],
-                    'student_rollno'      => $SingleStudentData['studentRollNo'],
-                    'student_bloodgroup'  => $SingleStudentData['studentBloodGroup'],
-                    'student_image'       => $image,
-                    'student_description' => $SingleStudentData['studentDescription'],
-                    'parent_name'         => $SingleStudentData['studentParentName'],
-                    'parent_emailid'      => $SingleStudentData['studentParentEmailID'],
-                    'parent_contactno'    => $SingleStudentData['studentParentContactNo'],
-                    'parent_occupation'   => $SingleStudentData['studentParentOccupation'],
-                    'parent_address'      => $SingleStudentData['studentParentAddress'],
-                    'added_by'            => $id,
-                    'updated_by'          => $id,
-                    'is_del'              => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $SingleStudentData['studentContactNo'],
-                    'description'    => $SingleStudentData['studentDescription'],
-                    'profile_image'  => $image,
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                $Assign_Student_Classroom = array(
-                    'account_id'     => $CurrentStudentID,
-                    'classroom_id'   => $classroom_id,
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $assign_classroom_students = $this->db->table('el_classroom_assignment');
-                $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
-
-
-
-                if($dataInserted && $StudentInserted && $Student_ac_inserted && $assign_classroom_inserted)
-                {
-                    return TRUE;
-                }
-                else
-                {
-                    return FALSE;
-                }     
+                return TRUE;
             }
             else
             {
-                //Add student in accounts table
-                $StudentData = array(
-                    'unique_id'  => date("YmdHis"),
-                    'reg_id'     => $reg_id,
-                    'username'   => $SingleStudentData['studentName'],
-                    'email'      => $SingleStudentData['studentEmailID'],
-                    'pass'       => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions'=> 'Student',
-                    'status'     => 'Verified',
-                    'mfa_status' => 0,
-                    'added_by'   => $id,
-                    'updated_by' => $id,
-                    'is_del'     => 0,
-                );
-
-                $Studentbuilder = $this->db->table('el_accounts');
-                $StudentdataInserted = $Studentbuilder->insert($StudentData);
-                $CurrentStudentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Student_Acc_Details = array(
-                    'account_id'     => $CurrentStudentID,
-                    'contact_number' => $SingleStudentData['studentContactNo'],
-                    'description'    => $SingleStudentData['studentDescription'],
-                    'profile_image'  => $image,
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Student_ac_builder = $this->db->table('el_account_details');
-                $Student_ac_inserted = $Student_ac_builder->insert($Student_Acc_Details);
-
-                //Add parent in accounts table
-                $Parentdata = array(
-                    'unique_id'   => date("YmdHis")+1,
-                    'reg_id'      => $reg_id,
-                    'username'    => $SingleStudentData['studentParentName'],
-                    'email'       => $SingleStudentData['studentParentEmailID'],
-                    'pass'        => password_hash("easylearn", PASSWORD_BCRYPT),
-                    'permissions' => 'Parent',
-                    'status'      => 'Verified',
-                    'mfa_status'  => 0,
-                    'added_by'    => $id,
-                    'updated_by'  => $id,
-                    'is_del'      => 0,
-                );
-
-                $Parentbuilder = $this->db->table('el_accounts');
-                $ParentdataInserted = $Parentbuilder->insert($Parentdata);
-                $CurrentParentID = $this->db->insertID();
-
-                //Add student in accounts details table
-                $Parent_Acc_Details = array(
-                    'account_id'     => $CurrentParentID,
-                    'contact_number' => $SingleStudentData['studentParentContactNo'],
-                    'description'    => '',
-                    'profile_image'  => '',
-                    'layout_pref'    => 'Menu',
-                    'language_pref'  => 'English',
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $Parent_ac_builder = $this->db->table('el_account_details');
-                $Parent_ac_inserted = $Parent_ac_builder->insert($Parent_Acc_Details);
-
-                //Add in Student Table
-                $Studentdata = array(
-                    'unique_id'           => date("YmdHis"),
-                    'account_id'          => $CurrentStudentID,
-                    'parent_id'           => $CurrentParentID,
-                    'student_name'        => $SingleStudentData['studentName'],
-                    'student_gender'      => $SingleStudentData['studentGender'],
-                    'student_dob'         => $SingleStudentData['studentDob'],
-                    'student_emailid'     => $SingleStudentData['studentEmailID'],
-                    'student_nationality' => $SingleStudentData['studentNationality'],
-                    'student_contactno'   => $SingleStudentData['studentContactNo'],
-                    'student_rollno'      => $SingleStudentData['studentRollNo'],
-                    'student_bloodgroup'  => $SingleStudentData['studentBloodGroup'],
-                    'student_image'       => $image,
-                    'student_description' => $SingleStudentData['studentDescription'],
-                    'parent_name'         => $SingleStudentData['studentParentName'],
-                    'parent_emailid'      => $SingleStudentData['studentParentEmailID'],
-                    'parent_contactno'    => $SingleStudentData['studentParentContactNo'],
-                    'parent_occupation'   => $SingleStudentData['studentParentOccupation'],
-                    'parent_address'      => $SingleStudentData['studentParentAddress'],
-                    'added_by'            => $id,
-                    'updated_by'          => $id,
-                    'is_del'              => 0
-                );
-
-                $Studentbuilder = $this->db->table('el_student');
-                $StudentInserted = $Studentbuilder->insert($Studentdata);
-
-                $Assign_Student_Classroom = array(
-                    'account_id'     => $CurrentStudentID,
-                    'classroom_id'   => $classroom_id,
-                    'added_by'       => $id,
-                    'updated_by'     => $id,
-                    'is_del'         => 0
-                );
-
-                $assign_classroom_students = $this->db->table('el_classroom_assignment');
-                $assign_classroom_inserted = $assign_classroom_students->insert($Assign_Student_Classroom);
-
-                if($StudentInserted && $Parent_ac_inserted && $ParentdataInserted && $StudentdataInserted && $Student_ac_inserted && $assign_classroom_inserted)
-                {
-                    return TRUE;
-                }
-                else
-                {
-                    return FALSE;
-                }
+                return FALSE;
             }
         }
         else
@@ -682,7 +401,7 @@ class Classroom_Model extends Model
     public function get_student_reg($id = NULL)
     {
         $builder = $this->db->table('el_student');
-        $builder->select('el_accounts.id, el_student.unique_id, student_name, student_gender, student_emailid, student_contactno, parent_name, parent_emailid, parent_contactno');
+        $builder->select('el_accounts.id, el_student.unique_id, student_name, student_emailid');
         $builder->join('el_accounts', 'el_accounts.id = el_student.account_id');
         $builder->where('el_accounts.reg_id', $id);
         $builder->where('el_student.is_del', 0);
@@ -704,7 +423,7 @@ class Classroom_Model extends Model
     public function get_student_reg_classroom($id = NULL)
     {
         $builder = $this->db->table('el_classroom_assignment');
-        $builder->select('el_student.unique_id, student_name, student_gender, student_emailid, student_contactno, parent_name, parent_emailid, parent_contactno');
+        $builder->select('el_student.unique_id, student_name, student_emailid');
         $builder->join('el_student', 'el_student.account_id = el_classroom_assignment.account_id');
         $builder->where('el_classroom_assignment.classroom_id', $id);
         $builder->where('el_student.is_del', 0);
@@ -727,7 +446,7 @@ class Classroom_Model extends Model
     public function get_student()
     {
         $builder = $this->db->table('el_student');
-        $builder->select('unique_id, student_name, student_gender, student_emailid, student_contactno, parent_name, parent_emailid, parent_contactno');
+        $builder->select('unique_id, student_name, student_emailid');
         $builder->where('is_del', 0);
         $builder->orderBy('id', 'DESC');
         $query = $builder->get();
@@ -747,7 +466,7 @@ class Classroom_Model extends Model
     public function get_student_by_id($id = NULL)
     {
         $builder = $this->db->table('el_student');
-        $builder->select('el_student.unique_id, el_student.student_name, el_student.student_dob, el_student.student_gender, el_student.student_nationality, el_student.student_emailid, el_student.student_contactno, el_student.student_rollno, el_student.student_bloodgroup, el_student.student_description, el_student.parent_name, el_student.parent_emailid, el_student.parent_contactno, el_student.parent_occupation, el_student.parent_address, el_account_details.profile_image');
+        $builder->select('el_student.unique_id, el_student.student_name, el_student.student_emailid, el_student.student_description,  el_account_details.profile_image');
         $builder->join('el_account_details', 'el_account_details.account_id = el_student.account_id');
         $builder->where('el_student.unique_id', $id);
         $builder->where('el_student.is_del', 0);
@@ -868,7 +587,7 @@ class Classroom_Model extends Model
     public function delete_student($id = NULL)
     {
         $builder = $this->db->table('el_student');
-        $builder->select('account_id, parent_id');
+        $builder->select('account_id');
         $builder->where('unique_id', $id);
         $builder->where('is_del', 0);
         $query = $builder->get();
@@ -895,42 +614,7 @@ class Classroom_Model extends Model
 
                     if($query3)
                     {
-                        $builder4 = $this->db->table('el_student');
-                        $builder4->select('account_id');
-                        $builder4->where('parent_id', $data['parent_id']);
-                        $builder4->where('is_del', 0);
-                        $query4 = $builder4->get();
-
-                        if($query4->getNumRows() > 0)
-                        {
-                            return TRUE;
-                        }
-                        else
-                        {
-                            $builder5 = $this->db->table('el_accounts');
-                            $builder5->where('id', $data['parent_id']);
-                            $query5 = $builder5->update(array('is_del' => 1));
-            
-                            if($query5)
-                            {
-                                $builder6 = $this->db->table('el_account_details');
-                                $builder6->where('account_id', $data['parent_id']);
-                                $query6 = $builder6->update(array('is_del' => 1));
-
-                                if($query6)
-                                {
-                                    return TRUE;
-                                }
-                                else
-                                {
-                                    return FALSE;
-                                }
-                            }
-                            else
-                            {
-                                return FALSE;
-                            }
-                        }
+                        return TRUE;
                     }
                     else
                     {

@@ -28,12 +28,7 @@
                                 <tr>
                                     <th>Sr. No.</th>
                                     <th>Name</th>
-                                    <th>Gender</th>
                                     <th>Email ID</th>
-                                    <th>Contact Number</th>
-                                    <th>Parent Name</th>
-                                    <th>Parent Email ID</th>
-                                    <th>Parent Contact Number</th>
                                 </tr>
                             </thead>
                         </table>
@@ -74,38 +69,6 @@
                             <i class="fa fa-solid fa-user"></i> &nbsp; <b>About</b>
                         </p>
 
-                        <hr class="MentorHrTag">
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Gender:</b>
-                            </div>
-
-                            <div class="col-8 s_gender">
-                                Male
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Date of birth:</b>
-                            </div>
-
-                            <div class="col-8 s_dob">
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Nationality:</b>
-                            </div>
-
-                            <div class="col-8 s_nationality">
-                            </div>
-                        </div>
-                        <br>
-
                         <div class="row">
                             <div class="col-4">
                                 <b>Email:</b>
@@ -113,37 +76,6 @@
 
                             <div class="col-8 s_email">
                                 RaviShankar@gmail.com
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Contact Number:</b>
-                            </div>
-
-                            <div class="col-8 s_contact">
-                                +91 7678675767
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Roll Number:</b>
-                            </div>
-                            
-                            <div class="col-8 s_rollno">
-                            </div>
-                        </div>
-                        <br>
-                        
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Blood Group:</b>
-                            </div>
-
-                            <div class="col-8 s_bloodgrp">
                             </div>
                         </div>
                         <br>
@@ -164,63 +96,10 @@
                         <br>
                         <hr class="MentorHrTag">
 
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Parent Name:</b>
-                            </div>
-
-                            <div class="col-8 p_name">
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Email:</b>
-                            </div>
-
-                            <div class="col-8 p_email">
-                                RaviShankar@gmail.com
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Contact Number:</b>
-                            </div>
-
-                            <div class="col-8 p_contact">
-                                +91 7678675767
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Parent Occupation:</b>
-                            </div>
-
-                            <div class="col-8 p_occupation">
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <b>Address:</b>
-                            </div>
-
-                            <div class="col-8 s_address">
-                            </div>
-                        </div>
-                        <br>
-
-                        <hr class="MentorHrTag">
                         <div class='d-flex justify-content-center p-5'>
-                            <a href="" class="btn btn-rounded btn-info edit-student"> 
-                                <i class="ti-pencil"> Edit </i> 
-                            </a>
+                            <button type='button' class="btn btn-rounded btn-danger delete-student"> 
+                                <i class="ti-close"> Delete </i> 
+                            </button>
                         </div>
                     </div>
                 </div>

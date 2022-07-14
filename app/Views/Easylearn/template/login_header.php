@@ -30,7 +30,7 @@
     <meta name="author" content="">
     <link rel="icon" href="<?=base_url(); ?>/public/Easylearn/images/fav.png">
 
-    <title>Easylearn</title>
+    <title>VSD-IAT</title>
 
     <!-- Vendors Style-->
     <link rel="stylesheet" href="<?=base_url(); ?>/public/Easylearn/css/vendors_css.css">
@@ -90,25 +90,6 @@
                                 role="button">
                                 <span class="icon-Align-left"><span class="path1"></span><span
                                         class="path2"></span><span class="path3"></span></span>
-                            </a>
-                        </li>
-                        <li class="btn-group nav-item d-none d-xl-inline-block">
-                            <a href="contact_app_chat.html" class="waves-effect waves-light nav-link svg-bt-icon"
-                                title="Chat">
-                                <i class="icon-Chat"><span class="path1"></span><span class="path2"></span></i>
-                            </a>
-                        </li>
-                        <li class="btn-group nav-item d-none d-xl-inline-block">
-                            <a href="mailbox.html" class="waves-effect waves-light nav-link svg-bt-icon"
-                                title="Mailbox">
-                                <i class="icon-Mailbox"><span class="path1"></span><span class="path2"></span></i>
-                            </a>
-                        </li>
-                        <li class="btn-group nav-item d-none d-xl-inline-block">
-                            <a href="extra_taskboard.html" class="waves-effect waves-light nav-link svg-bt-icon"
-                                title="Taskboard">
-                                <i class="icon-Clipboard-check"><span class="path1"></span><span
-                                        class="path2"></span><span class="path3"></span></i>
                             </a>
                         </li>
                     </ul>
@@ -192,13 +173,6 @@
                         <!-- sidebar menu-->
                         <ul class="sidebar-menu" data-widget="tree">
                             <li class="header">Home & Dashboard</li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon-Layout-grid"><span class="path1"></span><span
-                                            class="path2"></span></i>
-                                    <span>Home</span>
-                                </a>
-                            </li>
 
                             <li>
                                 <a href="dashboard">
@@ -207,28 +181,6 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
-
-                            <li >
-                                <a href="#" >
-                                    <i class="icon-Article"><span class="path1"></span><span class="path2"></span></i>
-                                    <span>News Feeds</span>
-                                </a>
-                            </li>
-
-                            <!-- <li>
-                                <a href="https://www.ezprofilebuilder.com" target="_blank">
-                                <i><img src="<?=base_url(); ?>/public/Easylearn/images/icons/ez_profiler_logo.jpeg" style="width:25px;height:25px"
-                                alt="logo"><span class="path1"></span><span class="path2"></span></i>
-                                    <span>EZ Profile Builder </span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="https://www.ezjobmate.com" target="_blank">
-                                    <i class="icon-Article"><span class="path1"></span><span class="path2"></span></i>
-                                    <span>EZ Job Mate</span>
-                                </a>
-                            </li> -->
 
                             <?php if($session->get('user')['status'] == 'Verified') { if($session->get('user')['permissions'] == 'Super admin') {?>
                                 <li class="header">Features</li>
@@ -283,14 +235,6 @@
 
                             <?php if($session->get('user')['permissions'] == 'School' || $session->get('user')['permissions'] == 'Jr College' ) { ?>
                                 <li class="header">Classroom & Attendance</li>
-                            
-                                <li>
-                                    <a href="manage_training_material">
-                                        <i class="icon-Layout-4-blocks"><span class="path1"></span><span class="path2"></span></i>
-                                        <span>Training Material</span>
-                                    </a>
-                                </li>
-
 
                                 <li class="treeview">
                                     <a href="#">
@@ -317,18 +261,6 @@
                                         <li>
                                             <a href="manageBatch"><i class="icon-Commit"><span class="path1"></span>
                                                 <span class="path2"></span></i>Manage Batch
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="manageLectures"><i class="icon-Commit"><span class="path1"></span>
-                                                <span class="path2"></span></i>Manage Lectures
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a href="manageAttendance"><i class="icon-Commit"><span class="path1"></span>
-                                                <span class="path2"></span></i>Manage Attendance
                                             </a>
                                         </li>
 
@@ -388,25 +320,6 @@
                                         </li>
                                         <li>
                                             <a href="manageannouncements"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Announcements</a>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <li class="treeview">
-                                    <a href="#">
-                                        <i class="icon-Settings"><span class="path1"></span><span class="path2"></span></i>
-                                        <span>MIS</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-right pull-right"></i>
-                                        </span>
-                                    </a>
-
-                                    <ul class="treeview-menu">
-                                        <li>
-                                            <a href="feeStructure"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Fee Structure</a>
-                                        </li>
-                                        <li>
-                                            <a href="manageHostel"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Hostel</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -507,79 +420,6 @@
 
                             <?php } ?>
 
-                            <li class="header">Tools & Gadgets</li>
-
-                            <li class="treeview">
-                                <a href="#">
-                                    <i class="icon-Cardboard-vr"><span class="path1"></span><span class="path2"></span></i>
-                                    <span>Boards</span>
-                                    <span class="pull-right-container">
-                                        <i class="fa fa-angle-right pull-right"></i>
-                                    </span>
-                                </a>
-
-                                <ul class="treeview-menu">
-                                    <li>
-										<a href="whiteboard">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Whiteboard</span>
-										</a>
-									</li>
-
-                                    <li>
-										<a href="Notebook">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Notebook</span>
-										</a>
-									</li>
-
-									<li>
-										<a href="Mathstool">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Mathematics</span>
-										</a>
-									</li>
-
-									<li>
-										<a href="Physicstool">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Physics</span>
-										</a>
-									</li>
-                                    
-									<li>
-										<a href="Chemistrytool">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Chemistry</span>
-										</a>
-									</li>
-                                </ul>
-                            </li>
-
-							<li class="treeview">
-                                <a href="#">
-                                    <i class="icon-Tools"><span class="path1"></span><span class="path2"></span></i>
-                                    <span>Tools</span>
-                                    <span class="pull-right-container">
-                                        <i class="fa fa-angle-right pull-right"></i>
-                                    </span>
-                                </a>
-                                <ul class="treeview-menu">
-                                    <li>
-										<a href="text_speech">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Text & Speech</span>
-										</a>
-									</li>
-                                    <li>
-										<a href="manage_document">
-											<i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>
-											<span>Document Manager</span>
-										</a>
-									</li>
-                                </ul>
-                            </li>
-
                             <?php } ?>
 
                             <li class="header">Feedback & Reports</li>
@@ -587,14 +427,6 @@
                                 <a href="#">
                                     <i class="icon-Like"><span class="path1"></span><span class="path2"></span></i>
                                     <span>Feedback</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="reports">
-                                    <i class="icon-Chart-line"><span class="path1"></span><span
-                                            class="path2"></span></i>
-                                    <span>Reports</span>
                                 </a>
                             </li>
 

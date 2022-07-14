@@ -51,7 +51,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <title>Easy Learn</title>
+    <title>VSD-IAT</title>
 </head>
 
 <body>
@@ -155,87 +155,9 @@
                             </li>
 
                             <li>
-                                <a href='admission' class="nav-link" id="navbarLandings" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="fas fa-long-arrow-right"></i> Admission
-                                </a>
-                            </li>
-                            <li class="parent-item">
-                                <a class="nav-link" id="navbarCourses" data-bs-toggle="collapse" href="#aboutSubmenu"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-long-arrow-right"></i> About us
-                                </a>
-
-                                <ul class="collapse list-unstyled px-5" id="aboutSubmenu">
-                                    <li><a href="about">
-                                            About
-                                        </a></li>
-                                    <li><a href="howit">
-                                            How it Works
-                                        </a></li>
-                                    <li><a href="features">
-                                            Features
-                                        </a></li>
-                                    <li><a href="benefits">
-                                            Benefits
-                                        </a></li>
-                                    <li><a target='_blank'
-                                            href="https://easylearn.s3.ap-south-1.amazonaws.com/EasyLearn+-+V2/Smart+Education+using+EasyLearn+-+WhitePaper.pdf">
-                                            Whitepaper
-                                        </a></li>
-                                </ul>
-                            </li>
-
-                            <li class="parent-item">
-                                <a class="nav-link" id="navbarCourses" data-bs-toggle="collapse"
-                                    href="#dashboardSubmenu" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-long-arrow-right"></i> Dashboard
-                                </a>
-
-                                <ul class="collapse list-unstyled px-5" id="dashboardSubmenu">
-                                    <li>
-                                        <a href="classroom">
-                                            Classroom
-                                        </a>
-                                    <li><a href="group">
-                                            Group
-                                        </a></li>
-                                    <li><a href="mentor">
-                                            Mentor
-                                        </a></li>
-                                    <li><a href="course">
-                                            Courses
-                                        </a></li>
-                                    <li><a href="library">
-                                            Libraries
-                                        </a></li>
-                                </ul>
-                            </li>
-
-                            <li class="parent-item">
-                                <a class="nav-link" id="navbarCourses" data-bs-toggle="collapse" href="#channelSubmenu"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-long-arrow-right"></i> Channel
-                                </a>
-
-
-                                <ul class="collapse list-unstyled px-5" id="channelSubmenu">
-                                    <li>
-                                        <a href="techchannelList">
-                                            Technology
-                                        </a>
-                                    <li><a href="knowchannelList">
-                                            Knowledge
-                                        </a></li>
-
-                                </ul>
-                            </li>
-                            <li>
                                 <a href="#"><i class="fas fa-long-arrow-right"></i> Team</a>
                             </li>
-                            <li>
-                                <a href="#"><i class="fas fa-long-arrow-right"></i> Services</a>
-                            </li>
+
                             <li>
                                 <a href="#"><i class="fas fa-long-arrow-right"></i> Contact Us</a>
                             </li>
@@ -277,104 +199,8 @@
                     </li>
 
                     <li class="nav-item dropdown dropdown-full-width">
-                        <a href='admission' class="nav-link" id="navbarLandings" aria-haspopup="true"
-                            aria-expanded="false">
-                            Admission
-                        </a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarCourses" data-bs-toggle="dropdown" href="#"
-                            aria-haspopup="true" aria-expanded="false">
-                            About us
-                        </a>
-                        <div class="dropdown-menu border-xl shadow-none" aria-labelledby="navbarCourses">
-                            <div class="row gx-0">
-
-                                <div class="col-md-4">
-                                    <!-- List -->
-                                    <a class="dropdown-item" href="about">
-                                        About
-                                    </a>
-                                    <a class="dropdown-item" href="howit">
-                                        How it Works
-                                    </a>
-                                    <a class="dropdown-item" href="features">
-                                        Features
-                                    </a>
-                                    <a class="dropdown-item" href="benefits">
-                                        Benefits
-                                    </a>
-                                    <a class="dropdown-item" target='_blank'
-                                        href="https://easylearn.s3.ap-south-1.amazonaws.com/EasyLearn+-+V2/Smart+Education+using+EasyLearn+-+WhitePaper.pdf">
-                                        Whitepaper
-                                    </a>
-                                </div>
-                            </div>
-                        </div> <!-- / .row -->
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarCourses" data-bs-toggle="dropdown" href="#"
-                            aria-haspopup="true" aria-expanded="false">
-                            Dashboard
-                        </a>
-                        <div class="dropdown-menu border-xl shadow-none" aria-labelledby="navbarCourses">
-                            <div class="row gx-0">
-
-                                <div class="col-md-4">
-                                    <!-- List -->
-                                    <a class="dropdown-item" href="classroom">
-                                        Classroom
-                                    </a>
-                                    <a class="dropdown-item" href="group">
-                                        Group
-                                    </a>
-                                    <a class="dropdown-item" href="mentor">
-                                        Mentor
-                                    </a>
-                                    <a class="dropdown-item" href="course">
-                                        Courses
-                                    </a>
-                                    <a class="dropdown-item" href="library">
-                                        Libraries
-                                    </a>
-                                </div>
-                            </div>
-                        </div> <!-- / .row -->
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarCourses" data-bs-toggle="dropdown" href="#"
-                            aria-haspopup="true" aria-expanded="false">
-                            Channel
-                        </a>
-                        <div class="dropdown-menu border-xl shadow-none" aria-labelledby="navbarCourses">
-                            <div class="row gx-0">
-
-                                <div class="col-md-4">
-                                    <!-- List -->
-                                    <a class="dropdown-item" href="techchannelList">
-                                        Technology
-                                    </a>
-                                    <a class="dropdown-item" href="knowchannelList">
-                                        Knowledge
-                                    </a>
-                                </div>
-                            </div>
-                        </div> <!-- / .row -->
-                    </li>
-
-                    <li class="nav-item dropdown dropdown-full-width">
                         <a href='team' class="nav-link" id="navbarLandings" aria-haspopup="true" aria-expanded="false">
                             Team
-                        </a>
-                    </li>
-
-                    <li class="nav-item dropdown dropdown-full-width">
-                        <a href='services' class="nav-link" id="navbarLandings" aria-haspopup="true"
-                            aria-expanded="false">
-                            Services
                         </a>
                     </li>
 
@@ -412,7 +238,5 @@
                 </li>
 
             </ul>
-
-
         </div>
     </header>

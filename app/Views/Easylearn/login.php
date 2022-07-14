@@ -20,7 +20,7 @@
 
             <div class="col-12 col-lg-5 ">
                 <div class='login-box m-3 '>
-                    <h3 class="text-center m-5">Log In To Your Easylearn Account</h3>
+                    <h3 class="text-center m-5">Log In To Your VSD-IAT Account</h3>
                     <form class="" id='login_form'>
 
                         <?php $session->set('login_token', md5(uniqid(mt_rand(), true))); ?>
@@ -71,11 +71,6 @@
                             LOGIN
                         </button>
                     </form>
-
-                    <p class="mt-5 font-size-sm text-center">
-                        Don't have an account? <a class="text-underline" href="signup" role="button"
-                            aria-expanded="false">Sign up</a>
-                    </p>
                 </div>
 
                 <div class='otp-box m-3' style="display:none;">

@@ -45,7 +45,7 @@ class HTMLtoCSV extends BaseController
         header('Content-Disposition: attachment; filename=Student_Template.csv');
 
         $file = fopen('php://output','w');
-        $header = array("Sr No.","Student Name","Student Gender","Student DOB(dd-mm-yyyy)","Student Email","Nationality","Student_Contact","Student RollNo","Student Blood Group","Student Image URL","Student Description","Parent Name","Parent Email","Parent ContactNo","Parent Occupation","Parent Address",);
+        $header = array("Sr No.","Student Name", "Student Email", "Student Description");
         
         fputcsv($file,$header);
         fclose($file);
@@ -81,57 +81,29 @@ class HTMLtoCSV extends BaseController
                     {
                         if( ($row[0] != "" || $row[0] != null) &&
                             ($row[1] != "" || $row[1] != null) && 
-                            ($row[2] != "" || $row[2] != null ) &&
-                            ($row[3] != "" || $row[3] != null ) &&
-                            ($row[4] != "" && $row[4] != null && filter_var($row[4], FILTER_VALIDATE_EMAIL)) &&
-                            ($row[5] != "" || $row[5] != null ) &&
-                            ($row[6] != "" || $row[6] != null ) &&
-                            ($row[7] != "" || $row[7] != null ) &&
-                            ($row[8] != "" || $row[8] != null ) && 
-                            ($row[9] != "" || $row[9] != null ) &&
-                            ($row[10] != "" || $row[10] != null ) &&
-                            ($row[11] != "" && $row[11] != null) &&
-                            ($row[12] != "" && $row[12] != null && filter_var($row[12], FILTER_VALIDATE_EMAIL)) &&
-                            ($row[13] != "" || $row[13] != null ) &&
-                            ($row[14] != "" || $row[14] != null ) &&
-                            ($row[15] != "" || $row[15] != null )
+                            ($row[2] != "" && $row[2] != null && filter_var($row[2], FILTER_VALIDATE_EMAIL))
                         )
                         {
+                            $data = $this->Register_Model->check_email($row[2]);
 
-                            $data = $this->Register_Model->check_email($row[4]);
                             if(!$data)
                             {
-                                $date = str_replace('/', '-', $row[3]);
-                                $date = Date('Y-m-d',strtotime($date));
-
                                 $array = array(
-                                    'student_name'         => $row[1],
-                                    'student_gender'       => $row[2],                             
-                                    'student_dob'          => $date,                    
-                                    'student_emailid'      => $row[4],
-                                    'student_nationality'  => $row[5],
-                                    'student_contactno'    => $row[6],
-                                    'student_rollno'       => $row[7],                       
-                                    'student_bloodgroup'   => $row[8],
-                                    'student_image'        => $row[9],
-                                    'student_description'  => $row[10],
-                                    'parent_name'          => $row[11],
-                                    'parent_emailid'       => $row[12],
-                                    'parent_contactno'     => $row[13],
-                                    'parent_occupation'    => $row[14],
-                                    'parent_address'       => $row[15]
+                                    'student_name'         => $row[1],                    
+                                    'student_emailid'      => $row[2],
+                                    'student_description'  => $row[3]
                                 );
                                 array_push($insert_data, $array);
                             }
                             else
                             {
-                                $error = [$row[0], $row[1], $row[4], "Student Email Already Exists!"];
+                                $error = [$row[0], $row[1], $row[2], "Student Email Already Exists!"];
                                 array_push($not_insert_data, $error);
                             }
                         }
                         else
                         {
-                            $error = [$row[0], $row[1], $row[4], "Inproper Data"];
+                            $error = [$row[0], $row[1], $row[2], "Inproper Data"];
                             array_push($not_insert_data, $error);
                         }
                     }
