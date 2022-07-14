@@ -34,5 +34,5 @@
     </div>
 </section>
 
-<script src="<?=base_url(); ?>/public/Easylearn/js/classroom.js?<?=date("Ymd") ?>"></script>
+<script src="<?=base_url(); ?>/public/Easylearn/js/Classroom.js?<?=date("Ymd") ?>"></script>
 <?php include 'template/login_footer.php'; ?>

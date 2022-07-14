@@ -388,14 +388,6 @@
                             <?php } ?>
 
                             <?php if($session->get('user')['permissions'] == 'Student') { ?>
-                                <li class="header">Features</li>
-
-                                <li>
-                                    <a href="lectures" >
-                                        <i class="icon-Box1"><span class="path1"></span><span class="path2"></span></i>
-                                        <span>Calendar</span>
-                                    </a>
-                                </li>
 
                                 <?php if($labs != 'False'){ $i = 1; foreach($labs as $lab) { ?>
                                 <li class="treeview">

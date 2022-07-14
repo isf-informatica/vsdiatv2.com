@@ -1427,7 +1427,12 @@ $(document).ready(function () {
                     'unique_id': id
                 },
                 async: false,
-                success: function (response) {
+                success: function (response) 
+                {
+                    if($('.sidebar-mini').hasClass('sidebar-open'))
+                    {
+                        $('.sidebar-mini').removeClass('sidebar-open');
+                    }
                     response = JSON.parse(response);
 
                     $('#breadcrumb').html('');

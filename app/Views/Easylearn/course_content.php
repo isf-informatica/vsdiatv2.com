@@ -532,4 +532,4 @@
     include 'template/login_footer.php';
 ?>
 
-<script src="<?=base_url(); ?>/public/Easylearn/js/course.js"></script>
+<script src="<?=base_url(); ?>/public/Easylearn/js/Course.js"></script>
