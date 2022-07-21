@@ -43,17 +43,17 @@ class View extends BaseController
                     if($this->session->get('user')['permissions'] == 'School' || $this->session->get('user')['permissions'] == 'Jr College')
                     {
                         $current_access = ['manage_training_material', 'manageClassroom', 'manageStudents', 'addStudents', 'studentView', 'assignClassroom', 'manageCourses', 'view_course', 'view_topic', 'add_topic', 'view_topic_by_id', 'assignClassroomcourse', 
-                            'manageBatch','managenews','manageannouncements', 'assignBatch','feeStructure','addfeestructure', 'assignCourse','manageExam','manageHostel', 'manageLectures', 'manageAttendance', 'schedule_attendance', 'managelabinstance','assignHostelStudent'];
+                            'manageBatch','managenews','manageannouncements', 'assignBatch','feeStructure','addfeestructure', 'assignCourse','manageExam','manageHostel', 'manageLectures', 'manageAttendance', 'schedule_attendance', 'managelabinstance','assignHostelStudent','Examdetail','sentence_exam_detail','Exam_result','exam_result_id','sentence_exam_result','mcq_exam_result','manageMentors'];
                     }
                     
                     if($this->session->get('user')['permissions'] == 'Classroom')
                     {
-                        $current_access = ['manageStudents','studentView','addStudents','manageBatch','assignBatch','manageCourses','view_course','view_topic','add_topic','view_topic_by_id','manageExam'];
+                        $current_access = ['manageStudents','studentView','addStudents','manageBatch','assignBatch','manageCourses','view_course','view_topic','add_topic','view_topic_by_id','manageExam','Examdetail','sentence_exam_detail','Exam_result','exam_result_id','sentence_exam_result','mcq_exam_result'];
                     }
 
                     if($this->session->get('user')['permissions'] == 'Student')
                     {
-                        $current_access = ['course_content', 'lectures'];
+                        $current_access = ['course_content', 'lectures','mcq_exam','mcq_exam_start','mcq_exam_result','response_recorded','sentence_exam','sentence_exam_start','sentence_exam_result'];
                     }
 
                     if($this->session->get('user')['permissions'] == 'Mentor')

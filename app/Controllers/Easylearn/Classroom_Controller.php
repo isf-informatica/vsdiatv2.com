@@ -3282,4 +3282,55 @@ class Classroom_Controller extends ResourceController
         }
         echo json_encode($array);
     }
+
+    //Mentor Operations
+    public function get_mentor_details(){
+
+        $result = $this->Classroom_Model->get_mentor_details();
+        
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => $result,
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'No data',
+                'status'   => 500
+            );
+        }
+    
+        echo json_encode($array);
+    }
+
+    public function get_mentor_by_id(){
+
+        $data = $this->request->getPost();
+
+        $result = $this->Classroom_Model->get_mentor_by_id($data['id']);
+
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => $result,
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'No data',
+                'status'   => 500
+            );
+        }
+    
+        echo json_encode($array);
+    }
 }

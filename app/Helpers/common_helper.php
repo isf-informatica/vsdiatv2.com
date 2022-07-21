@@ -513,5 +513,194 @@
         return $result;
     }
 
+    function exam_detail_id($id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/exam_detail_id';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function mcq_exam_question($id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/mcq_exam_question';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function sent_exam_question($id){
+
+        $url = base_url().'/Easylearn/Exam_Controller/sent_exam_question';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id'=>$id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+
+    }
+
+    //Exam Detail By Id
+    function exam_detail_id_student($id = NULL, $permissions = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/exam_detail_id_student';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'permissions' => $permissions))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function sentence_exam_overview_student($id = NULL, $exam_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/sentence_exam_overview_student';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function sentence_exam_question_answer($id = NULL, $exam_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/sentence_exam_question_answer';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function exam_overview_student($id = NULL, $exam_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/exam_overview_student';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function mcq_exam_question_answer($id = NULL, $exam_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/mcq_exam_question_answer';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function check_exam_status($acc_id = NULL,$exam_id = null)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/check_exam_status';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $acc_id,'exam_id' => $exam_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function exam_question_student($id = NULL, $exam_id = NULL,$classroom_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/exam_question_student';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id,'classroom_id' => $classroom_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
+    function exam_sentence_question_student($id = NULL, $exam_id = NULL,$classroom_id = NULL)
+    {
+        $url = base_url().'/Easylearn/Exam_Controller/exam_sentence_question_student';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id, 'exam_id' => $exam_id, 'classroom_id' => $classroom_id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
 
 ?>

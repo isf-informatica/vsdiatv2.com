@@ -1,77 +1,59 @@
 <?php 
     include 'template/login_header.php'; 
 
-    if($session->get('user')['permissions']=='School' || $session->get('user')['permissions']=='Jr College'){
+    if($session->get('user')['permissions']=='School' || $session->get('user')['permissions']=='Jr College')
+    {
         $course_details    = json_decode(course_details_getdata($session->get('user')['permissions'], $session->get('user')['reg_id'], $session->get('user')['id'],0), true);
         $classroom = json_decode(get_classroom($session->get('user')['permissions'], $session->get('user')['reg_id']), true)['data'];
     }
-    elseif ($session->get('user')['permissions']=='Classroom') {
+    elseif ($session->get('user')['permissions']=='Classroom') 
+    {
         $course_details    = json_decode(course_details_getdata($session->get('user')['permissions'], $session->get('user')['reg_id'], $session->get('user')['id'],$session->get('classroom_id')), true);
     }
-    
-
 ?>
 
 <section class="content">
-    <div class="container">
-        <div class="row d-flex justify-content-center" >
-            <div class="col-12 bg-white pb-20">
-                <div class='row'>
-                    <div class='col-6'>
-                        <div class="text-start p-3">   
-                            <a href="dashboard" class="btn btn-info active" ><i class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+    <div class="row d-flex justify-content-center" >
+        <div class="col-12">
+            <div class='box'>
+                <div class='box-body'>
+                    <div class='row'>
+                        <div class='col-6'>
+                            <div class="text-start p-3">   
+                                <a href="dashboard" class="btn btn-info active" ><i class="fas fa-backward"></i>&nbsp;&nbsp;Back</a>
+                            </div>
+                        </div>
+
+                        <div class='col-6'>
+                            <div style='text-align: right' class='p-3'>
+                                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-exam">Add Exam</a>
+                            </div>
                         </div>
                     </div>
+                    
+                    <h4 class="text-center text-dark bold">Exam List</h4>
 
-                    <div class='col-6'>
-                        <div style='text-align: right' class='p-3'>
-                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-exam">Add Exam</a>
-                        </div>
+                    <div class="table-responsive p-3">
+                        <table id="exam_list" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Exam Title</th>
+                                    <th>Exam Category</th>
+                                    <th>Course Name</th>
+                                    <th>Exam Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Visibility</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                </div>
-                
-                <h4 class="text-center text-dark bold">Exam List</h4>
-
-                <div class="table-responsive p-3">
-                    <table id="exam_list" class="table table-striped" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Exam Title</th>
-                                <th>Exam Category</th>
-                                <th>Course Name</th>
-                                <th>Exam Date</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Visibility</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-
-                        <!-- <tbody class='examlist_tbody'>
-                            <tr class='examlist_row d-none' style='cursor: pointer'>
-                                <td>Sr. No.</td>
-                                <td>Exam Title</td>
-                                <td>Exam Category</td>
-                                <td>Course Name</td>
-                                <td>Exam Date</td>
-                                <td>Start Time</td>
-                                <td>End Time</td>
-                                <td>
-                                    <button type="button" style='border-radius: 20px;' class="btn exam_visibility btn-sm btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                        <div style='border-radius: 50%;' class="handle"></div>
-                                    </button>                                
-                                </td>
-                                <td>
-                                    <i class="fas fa-edit edit_exam"></i>
-                                </td>
-                            </tr>
-                        </tbody> -->
-                    </table>
                 </div>
             </div>
         </div>
-    </div>    
+    </div>  
 <section>
 
 <!-- Modal Add Exam -->
@@ -355,6 +337,7 @@
         </div>
     </div>
 </div>
-    
+
 <script src="<?=base_url(); ?>/public/Easylearn/js/exam.js"></script>
+<script src="<?=base_url(); ?>/public/easylearn/vendor_plugins/timepicker/bootstrap-timepicker.min.js"></script>
 <?php include 'template/login_footer.php'; ?>

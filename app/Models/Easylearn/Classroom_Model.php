@@ -2663,4 +2663,43 @@ class Classroom_Model extends Model
 
     }
 
+    public function get_mentor_details(){
+        $builder = $this->db->table('el_mentor_registration');
+        $builder->select('id,unique_id,mentor_name,email');
+        $builder->where('status', 'Verified');
+        $builder->where('is_del', 0);
+        $builder->orderBy('id', 'DESC');
+        $query = $builder->get();
+
+        if($query->getNumRows()>0)
+        {
+            $data = $query->getResult();
+            return $data;
+        }
+        else
+        {
+            return False;
+        }
+    }
+
+    public function get_mentor_by_id($id){
+
+        $builder = $this->db->table('el_mentor_registration');
+        $builder->select('id,unique_id,mentor_name,email');
+        $builder->where('unique_id',$id);
+        $builder->where('is_del', 0);
+        $query = $builder->get();
+
+        if($query->getNumRows()>=0)
+        {
+            $data = $query->getRow();
+            return $data;
+        }
+        else
+        {
+            return False;
+        }
+
+    }
+
 }

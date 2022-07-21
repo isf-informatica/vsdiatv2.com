@@ -324,4 +324,46 @@ class Register_Model extends Model
             return 0;
         }
     }
+
+    public function add_mentor($mentor,$accounts,$account_details)
+    {
+
+        if($this->check_email($mentor['email']))
+        {
+            return FALSE;
+        }
+        else
+        {
+            $builder = $this->db->table('el_accounts');
+            $query = $builder->insert($accounts);
+            $acc_id = $this->db->insertID();
+            $mentor['account_id'] = $acc_id;
+            if($query)
+            {
+                $builder1 = $this->db->table('el_mentor_registration');
+                $query1 = $builder1->insert($mentor);
+                if($query1){
+                    $account_details['account_id'] = $acc_id;
+                    $builder2 = $this->db->table('el_account_details');
+                    $query2 = $builder2->insert($account_details);
+
+                    if($query2)
+                    {
+                        return TRUE;
+                    }
+                    else
+                    {
+                        return FALSE;
+                    }
+                }
+                else{
+                    return FALSE;
+                }
+            }
+            else{
+                return FALSE;
+            }
+        }
+
+    }
 }

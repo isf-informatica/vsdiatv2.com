@@ -253,6 +253,12 @@
                                         </li>
 
                                         <li>
+                                            <a href="manageMentors"><i class="icon-Commit"><span class="path1"></span>
+                                                <span class="path2"></span></i>Manage Mentors
+                                            </a>
+                                        </li>
+
+                                        <li>
                                             <a href="manageStudents"><i class="icon-Commit"><span class="path1"></span>
                                                 <span class="path2"></span></i>Manage Students
                                             </a>
@@ -388,6 +394,23 @@
                             <?php } ?>
 
                             <?php if($session->get('user')['permissions'] == 'Student') { ?>
+                                <li class="header">Examination</li>
+
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="icon-Pen-tool-vector"><span class="path1"></span><span class="path2"></span></i>
+                                        <span>Exam</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-right pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="mcq_exam"><i class="icon-Commit"><span class="path1"></span><span
+                                                        class="path2"></span></i>MCQ Exam</a></li>
+                                        <li><a href="sentence_exam"><i class="icon-Commit"><span class="path1"></span><span
+                                                        class="path2"></span></i>Sentence Exam</a></li>
+                                    </ul>
+                                </li>
 
                                 <?php if($labs != 'False'){ $i = 1; foreach($labs as $lab) { ?>
                                 <li class="treeview">

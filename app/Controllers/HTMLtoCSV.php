@@ -213,9 +213,7 @@ class HTMLtoCSV extends BaseController
                             'answer_option'    => $row[12],
                             'added_on'         => date('Y-m-d H:i:s'),
                             'added_by'         => $this->session->get('user')['id'],
-                            'user_time'        => $data['user_time'],
                             'updated_by'       => $this->session->get('user')['id'],
-                            'update_user_time' => $data['user_time'],
                             'is_del'           => 0
                         );
 
