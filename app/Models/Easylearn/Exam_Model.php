@@ -1592,6 +1592,43 @@ class Exam_Model extends Model
         }
     }
 
+    //get All MCQ Exam Mentor
+    public function mcq_exam_mentor($id = NULL)
+    {
+        $builder1 = $this->db->table('el_mentor_course')->select('course_id')->where('mentor_id', $id)->where('is_del', 0);
+
+        $builder2 = $this->db->table('el_mcq_exam');
+        $builder2->select('id,unique_id,exam_title, exam_duration, exam_category');
+        $builder2->whereIn('course_id', $builder1);
+        $builder2->where('exam_category', 'MCQ Exam');
+        $builder2->where('is_del', 0);
+        $builder2->orderBy('id', 'DESC');
+        $query2 = $builder2->get();
+
+        if($query2->getNumRows() > 0)
+        {
+            $data2 = $query2->getResult();
+
+            foreach($data2 as $key => $value)
+            {
+                $data2[$key] = (array)$data2[$key];
+
+                $builder1 = $this->db->table('el_mcq_question');
+                $builder1->where('exam_id', $data2[$key]['id']);
+                $builder1->where('is_del', 0);
+                $query1 = $builder1->get();
+
+                $data2[$key]['questions'] = $query1->getNumRows();
+
+            }
+
+            return $data2;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
 
 
 }

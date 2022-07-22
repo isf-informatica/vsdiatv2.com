@@ -702,5 +702,23 @@
         return $result;
     }
 
+    //Get Mentor Status
+    function get_mentor_status($id = NULL)
+    {
+        $url = base_url().'/Easylearn/Classroom_Controller/get_mentor_status';
+
+        $options = array(
+            'http' => array(
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query(array('id' => $id))
+            )
+        );
+        $context = stream_context_create($options);
+        $result  = file_get_contents($url, false, $context);
+        
+        return $result;
+    }
+
 
 ?>

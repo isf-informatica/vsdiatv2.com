@@ -3300,7 +3300,7 @@ class Classroom_Controller extends ResourceController
         {
             $array = array(
                 'Response' => 'OK',
-                'data'     => 'No data',
+                'data'     => 0,
                 'status'   => 500
             );
         }
@@ -3316,6 +3316,15 @@ class Classroom_Controller extends ResourceController
 
         if($result)
         {
+
+            if ($result['profile_image'] == null || $result['profile_image'] == 'NULL' || $result['profile_image'] == '') 
+            {
+                $result['profile_image'] = base_url() . '/public/easylearn/images/no_profile.jpg';
+            } 
+            else 
+            {
+                $result['profile_image'] = $result['profile_image'];
+            }
             $array = array(
                 'Response' => 'OK',
                 'data'     => $result,
@@ -3331,6 +3340,170 @@ class Classroom_Controller extends ResourceController
             );
         }
     
+        echo json_encode($array);
+    }
+
+    //Delete Mentor
+    public function delete_mentor()
+    {
+        $data = $this->request->getPost();
+        //$id         = $_POST['id'];
+        $array = array(
+            'is_del' => 1,
+            'updated_by' => $this->session->get('user')['id']
+        );
+
+        $data = $this->Classroom_Model->delete_mentor($array, $data);
+
+        if($data)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'TRUE',
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
+        echo json_encode($array);
+    }
+
+    //Get Mentor Status
+    public function get_mentor_status()
+    {
+        $id = $_POST['id'];
+        $result = $this->Classroom_Model->get_mentor_status($id);
+        
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'TRUE',
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
+        echo json_encode($array);
+    }
+
+    //Mentor Course by unique ID
+    public function get_mentor_course_byunique()
+    {
+        $unique_id = $_POST['unique_id'];
+        $result = $this->Classroom_Model->get_mentor_course_byunique($unique_id);
+
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => $result,
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
+        echo json_encode($array);
+    }
+
+    //Assign mentor course
+    public function assign_mentorcourses()
+    {
+        $data = $this->request->getPost();
+        $data['added_by']     = $this->session->get('user')['id'];
+        $data['updated_by']   = $this->session->get('user')['id'];
+
+        $result = $this->Classroom_Model->assign_mentorcourses($data);
+
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => $result,
+                'status'   => 500
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
+        echo json_encode($array);
+    }
+
+    //Get Batch Course
+    public function get_mentor_course()
+    {
+        $unique_id = $_POST['unique_id'];
+
+        $result = $this->Classroom_Model->get_mentor_course($unique_id);
+        if($result)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => $result,
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
+        echo json_encode($array);
+    }
+
+    //Delete Assign Course Mentor
+    public function delete_assignmentorcourse()
+    {
+        $data = $this->request->getPost();
+        
+        $array = array(
+            'is_del' => 1,
+            'updated_by' => $this->session->get('user')['id']
+        );
+        $data = $this->Classroom_Model->delete_assignmentorcourse($array, $data);
+
+        if($data)
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'TRUE',
+                'status'   => 200
+            );
+        }
+        else
+        {
+            $array = array(
+                'Response' => 'OK',
+                'data'     => 'FALSE',
+                'status'   => 500
+            );
+        }
         echo json_encode($array);
     }
 }

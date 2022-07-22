@@ -49,31 +49,29 @@
     </div>
 </div>
 
-<div class="modal fade show" id="edit_mentor_modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal fade show" id="edit_mentor_modal" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="staticBackdropLabel" style="color:#3c6fd0;">Mentor Details</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" style="font-size:25px;">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"
-                style="padding: 50px;background-image: linear-gradient(to top, #f6ebe3bb, #f6f4fdcc);">
+
+            <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-lg-5">
-                        <div class="text-center">
-                            <img src="" class="img border border-primary mentor_image"
-                                style="width:50%;border-radius:75%;" alt="">
+                    <div class="col-12">
+                        <div class="box ribbon-box" style="margin-bottom: 0px;">
+                          <div class="ribbon-two ribbon-two-primary"><span>Mentor</span></div>
+                          <div class="box-header no-border p-0 text-center" >                
+                              <img class="img_mentor" src=""  alt="" style="width:50%;height: 50%;">
+                          </div>
+                          <div class="box-body">
+                                <div class="user-contact list-inline text-center">
+                                    <a href="#" class="btn btn-circle mb-5 btn-primary" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></a>  
+                                    <a href="#" class="btn btn-circle mb-5 btn-danger delete_mentor"><i class="fa fa-trash"></i></a>             
+                                </div>
+                              <div class="text-center">
+                                <h3 class="my-10 m_name">dfd</h3>
+                                <h4 class="user-info mt-0 mb-10 text-fade m_email">dfs</h4>
+                              </div>
+                          </div>
                         </div>
-                        <div class="text-center m-3">
-                            <h4><b class="m_name">Ravi Shanker</b></h4>
-                            <p class="m_email">Product Developer</p>
-                        </div>
-                    </div>
-                    <div class='d-flex justify-content-center p-5'>
-                        <a class="btn btn-rounded btn-danger delete_mentor" data-id=""> <i class="ti-trash"> Delete</i></a>
                     </div>
                 </div>
             </div>
@@ -97,7 +95,7 @@
                         </div>
                         <div class='col-6'>
                             <div style='text-align: right' class='p-3'>
-                                <button type="button" id="add_mentor_btn" class="btn btn-primary m-15">Add Mentors</button>
+                                <button type="button" id="add_mentor_btn" class="btn btn-primary">Add Mentors</button>
                             </div>
                         </div>
                     </div>
@@ -110,6 +108,7 @@
                                     <th>Sr. No.</th>
                                     <th>Mentor Name</th>
                                     <th>Mentor Email</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>

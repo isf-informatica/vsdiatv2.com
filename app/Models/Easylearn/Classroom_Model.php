@@ -2685,14 +2685,15 @@ class Classroom_Model extends Model
     public function get_mentor_by_id($id){
 
         $builder = $this->db->table('el_mentor_registration');
-        $builder->select('id,unique_id,mentor_name,email');
+        $builder->select('el_mentor_registration.id,el_mentor_registration.unique_id,el_mentor_registration.mentor_name,el_mentor_registration.email,el_account_details.profile_image');
+        $builder->join('el_account_details', 'el_account_details.account_id = el_mentor_registration.account_id');
         $builder->where('unique_id',$id);
-        $builder->where('is_del', 0);
+        $builder->where('el_account_details.is_del', 0);
+        $builder->where('el_mentor_registration.is_del', 0);
         $query = $builder->get();
-
-        if($query->getNumRows()>=0)
+        if($query->getNumRows()>0)
         {
-            $data = $query->getRow();
+            $data = (array)$query->getRow();
             return $data;
         }
         else
@@ -2700,6 +2701,219 @@ class Classroom_Model extends Model
             return False;
         }
 
+    }
+
+    //Delete Mentor
+    public function delete_mentor($array = NULL, $data = NULL)
+    {
+        $builder = $this->db->table('el_mentor_registration');
+        $builder->select('account_id'); 
+        $builder->where('unique_id', $data['id']);
+        $query = $builder->get();
+
+        if($query->getNumRows()>0)
+        {
+            $rowData = (array)$query->getRow();
+            $account_id = $rowData['account_id'];
+
+            $builder = $this->db->table('el_mentor_registration');
+            $builder->where('unique_id', $data['id']);
+            $query1 = $builder->update($array);
+            if($query1)
+            {
+                $builder = $this->db->table('el_accounts');
+                $builder->where('id',$account_id);
+                $query2 = $builder->update($array);
+                if($query2)
+                {
+                    $builder = $this->db->table('el_account_details');
+                    $builder->where('account_id',$account_id);
+                    $query3 = $builder->update($array);
+                    if($query3){
+                        return TRUE;
+                    }
+                    else{
+                        return FALSE;
+                    }
+                }
+                else
+                {
+                    return FALSE;
+                }
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    //get Mentor Status
+    public function get_mentor_status($id = NULL) 
+    {
+        $builder = $this->db->table('el_accounts');
+        $builder->select('id');
+        $builder->where('unique_id', $id);
+        $builder->where('is_del', 0);
+        $query = $builder->get();
+
+        if($query->getNumRows() > 0)
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    //Mentor Course by unique ID
+    public function get_mentor_course_byunique($unique_id = NULL) 
+    {
+        $builder = $this->db->table('el_accounts');
+        $builder->select('id');
+        $builder->where('unique_id', $unique_id);
+        $builder->where('is_del', 0);
+        $query = $builder->get();
+
+        if($query->getNumRows() > 0)
+        {
+            $data = (array)$query->getRow();
+
+            $builder1 = $this->db->table('el_courses');
+            $builder1->select('id, course_name');
+
+            $subQuery = $this->db->table('el_mentor_course')->select('course_id')->where('mentor_id', $data['id'])->where('is_del', 0);
+
+            $builder1->whereNotIn('id', $subQuery);
+            $builder1->where('is_del', 0);
+            $query1 = $builder1->get();
+            
+            if($query1->getNumRows() > 0)
+            {
+                $data1 = $query1->getResult();
+
+                return $data1;
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    //assign mentor course
+    public function assign_mentorcourses($data=NULL)
+    {
+        $i =0;
+
+        $builder = $this->db->table('el_accounts');
+        $builder->select('id');
+        $builder->where('unique_id', $data['unique_id']);
+        $query = $builder->get();
+
+        if($query->getNumRows()>0)
+        {
+            $rowData = (array)$query->getRow();
+            $mentor_id = $rowData['id'];
+            $assign_data = [];
+
+            foreach(json_decode($data['selected_id'], true) as $course_id)
+            {
+                $builder = $this->db->table('el_mentor_course');
+                $builder->where('mentor_id'   , $mentor_id);
+                $builder->where('course_id'   , $course_id);
+                $builder->where('is_del'      , 0);
+                $query = $builder->get();
+
+                if($query->getNumRows() == 0)
+                {
+                    $assign_data['course_id']    = $course_id;
+                    $assign_data['mentor_id']    = $mentor_id;
+                    $assign_data['added_by']     = $data['added_by'];
+                    $assign_data['updated_by']   = $data['updated_by'];
+
+                    $builder2 = $this->db->table('el_mentor_course');
+                    $query2 = $builder2->insert($assign_data);
+
+                    if($query2)
+                    {
+                        $i++;
+                    }
+                }
+            }
+            return $i;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    //Get Mentor Course
+    public function get_mentor_course($unique_id = NULL) 
+    {
+        $builder = $this->db->table('el_accounts');
+        $builder->select('id');
+        $builder->where('unique_id', $unique_id);
+        $query = $builder->get();
+
+        if($query->getNumRows()>0)
+        {
+            $rowData  = (array)$query->getRow();
+            $mentor_id = $rowData['id'];
+
+            $builder  = $this->db->table('el_mentor_course');
+            $builder->join('el_accounts', 'el_accounts.id = el_mentor_course.mentor_id');
+            $builder->join('el_courses', 'el_courses.id = el_mentor_course.course_id');
+            $builder->select('el_mentor_course.id, el_mentor_course.course_id, el_courses.course_name');
+            $builder->where('el_mentor_course.mentor_id', $mentor_id);
+            $builder->where('el_courses.is_del', 0);
+            $builder->where('el_mentor_course.is_del', 0);
+            $builder->where('el_accounts.is_del', 0);
+            $builder->orderBy('el_mentor_course.id', 'DESC');
+
+            $query = $builder->get();
+
+            if($query->getNumRows() >= 0)
+            {
+                $data = $query->getResult();
+                return $data;
+            }
+            else
+            {
+                return FALSE;
+            }
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
+
+    //Delete Assign Course
+    public function delete_assignmentorcourse($array = NULL, $data = NULL)
+    {
+        $builder = $this->db->table('el_mentor_course');
+        $builder->where('id', $data['id']);
+        $query = $builder->update($array);
+
+        if($query)
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
     }
 
 }

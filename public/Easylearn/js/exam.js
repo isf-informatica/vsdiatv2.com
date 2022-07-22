@@ -384,8 +384,14 @@ $(document).ready(function () {
 	            url: "Easylearn/Exam_Controller/get_all_exam",
 	            type: "POST",
 	            dataSrc: function (json) {
-	                return json.data;
-	                console.log(json);
+	                if(json.data == 0)
+                    {
+                        return {};
+                    }
+                    else
+                    {
+                        return json.data;
+                    }
 	            },
 	        },
 	        rowId: "unique_id",

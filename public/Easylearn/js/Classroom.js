@@ -3314,4 +3314,234 @@ $(document).ready(function() {
     
         });
     }
+
+    if (location.pathname.split("/").slice(-1)[0] == 'assignMentors') 
+    {
+        var unique_id = (location.search.split(name + '=')[1] || '').split('&')[0];
+
+        //Generate assign course table
+        var assign_course = $("#assigncourse_list").DataTable({
+            rowReorder: true,
+            select: {
+                style: 'multi'
+            },
+            columnDefs: [{
+                orderable: true,
+                className: "reorder",
+                targets: "_all"
+            }, ],
+            ajax: {
+                url: "Easylearn/Classroom_Controller/get_mentor_course_byunique",
+                type: "POST",
+                data: {
+                    unique_id : unique_id
+                },
+                dataSrc: function (json) {
+                    if (json.data != 'FALSE') 
+                    {
+                        return json.data;
+                    } 
+                    else 
+                    {
+                        return json.data = [];
+                    }
+                },
+            },
+            rowId: "id",
+            columns: [{
+                    data: "id",
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                },
+                {
+                    data: "course_name"
+                },
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).addClass('assigncourse_list');
+            },
+        });
+
+        //save assign course
+        $('.save-assign-course').on('click', function () {
+            var selected_id = [];
+            var selected = assign_course.rows('.selected').data();
+
+            for (let i = 0; i < selected.length; i++) 
+            {
+                selected_id.push(selected[i]['id']);
+            }
+
+            if (selected_id.length == 0) 
+            {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please Select the Course",
+                });
+            } 
+            else 
+            {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You want to Update Batch",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) 
+                    {
+                        if (selected_id.length != 0) 
+                        {
+                            var formdata = new FormData();
+                            formdata.append('unique_id', unique_id);
+                            formdata.append('selected_id', JSON.stringify(selected_id));
+
+                            $('#loader').css('display', 'block');
+
+                            $.ajax({
+                                url: "Easylearn/Classroom_Controller/assign_mentorcourses",
+                                data: formdata,
+                                type: "POST",
+                                contentType: false,
+                                processData: false,
+                                success: function (response) 
+                                {
+                                    $('#loader').css('display', 'none');
+                                    response = JSON.parse(response);
+
+                                    if (response["data"] > 0) 
+                                    {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: response["data"] + " Assigned Successfully!",
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        }).then((result) => {
+                                            location.reload();
+                                        });
+                                    } 
+                                    else 
+                                    {
+                                        Swal.fire({
+                                            icon: "error",
+                                            title: "Oops...",
+                                            text: response.data,
+                                        }).then((result) => {
+                                            // location.reload();
+                                        });
+                                    }
+                                },
+                                error: function (response) 
+                                {
+                                    $('#loader').css('display', 'none');
+
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Oops...",
+                                        text: "Something went wrong!",
+                                    }).then((result) => {
+                                        // location.reload();
+                                    });
+                                }
+                            });
+                        } 
+                        else 
+                        {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Please Enter Details Properly",
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    
+        //Assigned batch course list
+        var assign_batch_course = $("#assignedcourse_list").DataTable({
+            rowReorder: true,
+            columnDefs: [{
+                orderable: true,
+                className: "reorder",
+                targets: "_all"
+            }, ],
+            ajax: {
+                url: "Easylearn/Classroom_Controller/get_mentor_course",
+                type: "POST",
+                data: {
+                    unique_id: unique_id
+                },
+                dataSrc: function (json) {
+                    if (json.data != 'FALSE') {
+                        return json.data;
+                    } else {
+                        return json.data = [];
+                    }
+                },
+            },
+            rowId: "id",
+            columns: [{
+                    data: "id",
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                },
+                {
+                    data: "course_name"
+                },
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return `<a href="#" class="waves-effect waves-light btn btn-rounded btn-danger delete_assigncourse mb-5" data-id="${row.id}"><i class="fas fa-trash-alt"></i></a>`;
+                    },
+                },
+
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).addClass('assignmentor_courselist');
+            },
+
+        });
+
+        //delete assigned course
+        $(document).on('click', '.delete_assigncourse', function () {
+            var id = $(this).attr('data-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to Remove Course",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) 
+                {
+                    $.ajax({
+                        url: 'Easylearn/Classroom_Controller/delete_assignmentorcourse',
+                        type: 'POST',
+                        data: {
+                            'id': id,
+                        },
+                        success: function (response) 
+                        {
+                            assign_batch_course.row("#" + id).remove().draw();
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    });
+                }
+            });
+        });
+
+
+
+    }
 });

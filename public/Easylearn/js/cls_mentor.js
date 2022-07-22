@@ -86,8 +86,8 @@ $(document).ready(function () {
     $('#add_mentor').on('submit', function (e) {
         e.preventDefault();
         var m_token = $('#mentor_token').val();
-        var m_name = $('#m_name').val();
-        var m_emailid = $('#m_emailid').val();
+        var m_name = $('#m_name').val().trim();
+        var m_emailid = $('#m_emailid').val().trim();
 
         if (m_name != '') {   
              if (m_emailid != '') {
@@ -212,8 +212,15 @@ $(document).ready(function () {
             url: "Easylearn/Classroom_Controller/get_mentor_details",
             type: "POST",
             dataSrc: function (json) {
-                return json.data;
-                console.log(json);
+                if(json.data == 0)
+                {
+                    return {};
+                }
+                else
+                {
+                    return json.data;
+                }
+                
             },
         },
         rowId: "unique_id",
@@ -229,7 +236,14 @@ $(document).ready(function () {
             {
                 data: "email"
             },
-            
+            {
+                data: null,
+                render: function (data, type, row, meta) 
+                {
+                    return `<a class="waves-effect waves-light btn btn-rounded btn-primary mb-5 d-sm-inline-flex" href="assignMentors?id=${row.unique_id}"><i class="fas fa-user-plus align-self-center"></i> &nbsp;&nbsp;Course</a>`;
+                }
+            },
+        
             
         ],
 
@@ -246,9 +260,9 @@ $(document).ready(function () {
             success: function (response) {
                 response = JSON.parse(response);
                 //console.log(response);
-                $('.unique_id').attr('data-id', response.data.unique_id);
                 $('.m_name').text(response.data.mentor_name);
                 $('.m_email').text(response.data.email);
+                $('.img_mentor').attr('src', response.data.profile_image);
                 $('.delete_mentor').attr('data-id', response.data.unique_id);
                 $('#edit_mentor_modal').modal('show');
 
@@ -268,6 +282,65 @@ $(document).ready(function () {
             }
         });
 
+    });
+
+    $(".delete_mentor").on("click", function () {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to proceed further!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    url: 'Easylearn/Classroom_Controller/delete_mentor',
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        setTimeout(function () {
+                            if (response.data == "TRUE") {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Successfully Deleted",
+                                }).then((result) => {
+                                    location.reload();
+                                });
+                            } else {
+                                $(".loader").addClass("d-none");
+                                $(".register_loader").addClass("d-none");
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: response.data,
+                                }).then((result) => {
+                                    // location.reload();
+                                });
+                            }
+                        }, 1000);
+
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: 'Something Wents Wrong',
+                }).then((result) => {
+                    // location.reload();
+                });
+
+            }
+        });
     });
 
 });

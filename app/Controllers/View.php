@@ -43,7 +43,7 @@ class View extends BaseController
                     if($this->session->get('user')['permissions'] == 'School' || $this->session->get('user')['permissions'] == 'Jr College')
                     {
                         $current_access = ['manage_training_material', 'manageClassroom', 'manageStudents', 'addStudents', 'studentView', 'assignClassroom', 'manageCourses', 'view_course', 'view_topic', 'add_topic', 'view_topic_by_id', 'assignClassroomcourse', 
-                            'manageBatch','managenews','manageannouncements', 'assignBatch','feeStructure','addfeestructure', 'assignCourse','manageExam','manageHostel', 'manageLectures', 'manageAttendance', 'schedule_attendance', 'managelabinstance','assignHostelStudent','Examdetail','sentence_exam_detail','Exam_result','exam_result_id','sentence_exam_result','mcq_exam_result','manageMentors'];
+                            'manageBatch','managenews','manageannouncements', 'assignBatch','feeStructure','addfeestructure', 'assignCourse','manageExam','manageHostel', 'manageLectures', 'manageAttendance', 'schedule_attendance', 'managelabinstance','assignHostelStudent','Examdetail','sentence_exam_detail','Exam_result','exam_result_id','sentence_exam_result','mcq_exam_result','manageMentors','assignMentors'];
                     }
                     
                     if($this->session->get('user')['permissions'] == 'Classroom')
@@ -58,7 +58,7 @@ class View extends BaseController
 
                     if($this->session->get('user')['permissions'] == 'Mentor')
                     {
-                        $current_access = [];
+                        $current_access = ['mcq_exam','sentence_exam','sentence_exam_start','sentence_exam_result','mcq_exam_start','mcq_exam_result','response_recorded'];
                     }
                 }
 
